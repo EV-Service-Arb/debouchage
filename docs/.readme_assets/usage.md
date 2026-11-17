@@ -21,10 +21,9 @@ it as it is; without any of it the site runs as it does alone.
 Run the checks:
 
 ```sh
-nix run .#test           # tsc, lint (eslint + steiger), vitest, build, size, Playwright
+nix run .#test           # every check (tsc, lint, vitest, Playwright, the hermetic build + budget, the image's smoke, npm audit); `-- --help` lists them
 nix run .#accept-test    # the same, writing the screenshot baselines (Linux)
 nix run .#size           # first-load JS against tests/bundle_budget.txt — the one hard gate
-nix flake check          # the hermetic Nix build and the budget against it
 ```
 
 Build the server and the container image:

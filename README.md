@@ -1,8 +1,8 @@
 # debouchage
 ![Lines Of Code](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/valeratrades/b48e6f02c61942200e7d1e3eeabf9bcb/raw/debouchage-loc.json)
 <br>
-[<img alt="ci errors" src="https://img.shields.io/github/actions/workflow/status/EV-Service-Arb/debouchage/errors.yml?branch=main&style=for-the-badge&style=flat-square&label=errors&labelColor=420d09" height="20">](https://github.com/EV-Service-Arb/debouchage/actions?query=branch%3Amain) <!--NB: Won't find it if repo is private-->
-[<img alt="ci warnings" src="https://img.shields.io/github/actions/workflow/status/EV-Service-Arb/debouchage/warnings.yml?branch=main&style=for-the-badge&style=flat-square&label=warnings&labelColor=d16002" height="20">](https://github.com/EV-Service-Arb/debouchage/actions?query=branch%3Amain) <!--NB: Won't find it if repo is private-->
+[![errors](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/valeratrades/b48e6f02c61942200e7d1e3eeabf9bcb/raw/debouchage-errors.json)](https://github.com/EV-Service-Arb/debouchage/actions/workflows/errors.yml?query=branch%3Amain)
+[![warnings](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/valeratrades/b48e6f02c61942200e7d1e3eeabf9bcb/raw/debouchage-warnings.json)](https://github.com/EV-Service-Arb/debouchage/actions/workflows/warnings.yml?query=branch%3Amain)
 
 The landing site of Débouchage Rapide Clermont-Ferrand, a drain-unblocking
 business that goes to the customer and sells six jobs at a fixed price.
@@ -72,10 +72,9 @@ it as it is; without any of it the site runs as it does alone.
 Run the checks:
 
 ```sh
-nix run .#test           # tsc, lint (eslint + steiger), vitest, build, size, Playwright
+nix run .#test           # every check (tsc, lint, vitest, Playwright, the hermetic build + budget, the image's smoke, npm audit); `-- --help` lists them
 nix run .#accept-test    # the same, writing the screenshot baselines (Linux)
 nix run .#size           # first-load JS against tests/bundle_budget.txt — the one hard gate
-nix flake check          # the hermetic Nix build and the budget against it
 ```
 
 Build the server and the container image:
