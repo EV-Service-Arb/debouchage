@@ -1,0 +1,27 @@
+%YAML 1.1
+---
+jobs:
+  audit:
+    name: npm audit (production dependencies)
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Install Nix
+      uses: DeterminateSystems/nix-installer-action@main
+      with:
+        extra-conf: lazy-trees = true
+    - name: Setup Nix cache
+      uses: nix-community/cache-nix-action@v7
+      with:
+        primary-key: nix-${{ runner.os }}-${{ hashFiles('**/flake.lock') }}
+        restore-prefixes-first-match: nix-${{ runner.os }}-
+    - name: npm audit
+      run: nix develop --command npm audit --omit=dev --audit-level=moderate
+    timeout-minutes: 10
+name: Warnings
+'on':
+  pull_request: {}
+  push: {}
+  workflow_dispatch: {}
+permissions:
+  contents: read
