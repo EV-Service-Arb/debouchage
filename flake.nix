@@ -132,18 +132,20 @@
         # the devShell from here; edit this file, not them.
         github = v_flakes.github {
           inherit pkgs pname;
+          inherit (landing) js;
           enable = true;
-          # not `inherit js`: a language module without `rs` makes the pre-commit install throw for want of a toolchain
           jobs = {
-            errors.augment = landing.js.particles.errors ++ (with landing.particles; [ e2e-typecheck e2e checks container-smoke ]);
-            warnings.augment = landing.js.particles.warnings ++ [ landing.particles.npm-audit ];
+            errors.default = true;
+            errors.augment = with landing.particles; [ e2e-typecheck e2e checks container-smoke ];
+            warnings.default = true;
+            warnings.augment = [ landing.particles.npm-audit ];
             other.augment = [ "loc-badge" ];
           };
           containerRelease = { registry = "ghcr.io/ev-service-arb"; };
           figma = { };
           # e2e compares every PR's render to these by its tolerance; this holds a refresh to CI's render
           visualBaselines = { dir = "tests/e2e/__screenshots__"; render = "accept-test"; paths = [ "tests/e2e/__screenshots__/**" ]; };
-          gitignore.extra = builtins.readFile "${v_flakes}/files/gitignore/js.gitignore" + ''
+          gitignore.extra = ''
             next-env.d.ts
             tests/e2e/node_modules
             test-results/
