@@ -15,7 +15,7 @@ test("the footer reaches every page, and each page's action lands on the card", 
   }
   await page.locator("[data-band=cta]").getByRole("link", { name: "Réserver mon intervention" }).click();
   await expect(page).toHaveURL(/\/fr#reserver$/);
-  await expect(page.locator("#reserver [data-lead-step=intro]")).toBeVisible();
+  await expect(page.locator("#reserver [data-lead-step=need]")).toBeVisible();
 });
 
 test("the footer switches to the same page in English", async ({ page }) => {

@@ -6,7 +6,7 @@ import { LEADS_DB } from "../env";
 export function leadRow(mobile: string): unknown {
   const db = new DatabaseSync(LEADS_DB, { readOnly: true });
   try {
-    return db.prepare("SELECT job, zip, location_id, spam_verdict, channel, flow, quoted_cents, extras FROM leads WHERE mobile = ?").get(normalizePhone(mobile));
+    return db.prepare("SELECT job, zip, location_id, spam_verdict, channel, flow, quoted_cents, extras, preferred_date, preferred_part FROM leads WHERE mobile = ?").get(normalizePhone(mobile));
   } finally {
     db.close();
   }

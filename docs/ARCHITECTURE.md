@@ -19,7 +19,7 @@ shared/config/site.ts ── the one `site` ──▶ proxy · routes · JSON-LD
 entities/content (FR designed, EN its translation) ──▶ widgets (Copy + PlaceView) ──▶ views ──▶ app/
                                                         └ booking-card: the kit's LeadCapture
 POST /quote ── prices the posted job with priceOf ── store ──▶ lead.created ──▶ panel
-POST /quote/booking ── a priced lead's slot preference ──▶ booking.requested ──▶ panel
+        └ the slot asked on the card ──▶ booking.requested ──▶ panel
 ```
 
 ## Invariants
@@ -63,18 +63,14 @@ geometry the frame's, in Tailwind classes and `app/globals.css`.
 
 ## The booking card
 
-The kit's `LeadCapture`, `layout="steps"`: when (`intro`, posted as the extra
-`when`), what (the six jobs as tiles, `fixed`), then the contact — first name
-(the kit's `name`, extra `first_name`), phone, address (the kit's locality),
-how to confirm (the brand's extra `confirm`). The server prices the posted job
-itself and stores its own number; a posted amount is never read, and a price
-that changed under the page is confirmed first (`/quote/confirm` without a
-script). The brand's rule refuses only what the card never offers (`when`,
-`confirm` off their lists), after the kit's phone rule. After a lead the card
-stays: `BookingDone` confirms the name, the call, the price and the arrival;
-for « autre jour » the kit's `manual` booking offers a day and a part of the
-day, posted to `/quote/booking` as `booking.requested`. A refusal lands back
-on `#reserver`.
+The kit's `LeadCapture` in the frame's screens (`screens`): the job and when
+(`intro`, the extra `when`); the slot for « aujourd’hui » and « autre jour »;
+first name, phone, address, how to confirm (the extra `confirm`). The server
+prices the posted job and keeps the slot, sending it on as
+`booking.requested`; a posted amount is never read. The brand's rule
+refuses only what the card never offers (`when`, `confirm` off their
+lists). After a lead `BookingDone` takes the card: name, call, price,
+arrival. A refusal lands back on `#reserver`.
 
 ## Leads reach the panel
 

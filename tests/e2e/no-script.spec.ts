@@ -3,6 +3,12 @@ import { expect, test } from "@playwright/test";
 import { leadRow } from "./support/leads";
 import { freshMobile } from "./support/mobile";
 
+/** Today in the runner's calendar, as the day tiles post it. */
+const today = () => {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+};
+
 // The funnel's floor: the card must book before any JavaScript has loaded.
 // A regression here is invisible to every other test and costs every lead.
 test.describe("without JavaScript", () => {
@@ -22,9 +28,12 @@ test.describe("without JavaScript", () => {
     const locality = `Chamalières ${testInfo.project.name}`;
     await page.goto("/fr#reserver");
     const form = page.locator("form#reserver-form");
-    for (const step of ["intro", "need", "phone"]) await expect(form.locator(`[data-lead-step=${step}]`)).toBeVisible();
-    await form.locator("label").filter({ hasText: "Aujourd’hui" }).click();
+    for (const step of ["need", "slot", "phone"]) await expect(form.locator(`[data-lead-step=${step}]`)).toBeVisible();
     await form.locator("label").filter({ hasText: "Douche, baignoire" }).click();
+    await form.locator("label").filter({ hasText: "Aujourd’hui" }).click();
+    // The slot posts with the lead too: today, the afternoon.
+    await form.locator("[data-lead-step=slot] label").filter({ hasText: "Auj." }).click();
+    await form.locator("[data-lead-step=slot] label").filter({ hasText: "Après-midi" }).click();
     await form.getByRole("textbox", { name: "Prénom" }).fill("Thierry");
     await form.getByRole("textbox", { name: "Téléphone" }).fill(mobile);
     await form.getByRole("textbox", { name: "Adresse ou commune" }).fill(locality);
@@ -44,6 +53,8 @@ test.describe("without JavaScript", () => {
       flow: "fixed",
       quoted_cents: 9900,
       extras: JSON.stringify({ when: "today", confirm: "call", first_name: "Thierry" }),
+      preferred_date: today(),
+      preferred_part: "afternoon",
     });
   });
 

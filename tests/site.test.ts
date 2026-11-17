@@ -71,7 +71,10 @@ describe("the home page", () => {
     for (const s of SUBJECTS) {
       const need = PRICING.needs[s];
       if (need?.kind !== "fixed") throw new Error(`${s} is not fixed`);
-      expect(html, s).toContain(`${TEXT.fr.jobs[s].tile}\n${formatCents(need.cents, "fr")}`);
+      const from = html.indexOf(`name="subject" value="${s}"`);
+      const tile = html.slice(from, html.indexOf("</label>", from));
+      expect(tile, s).toContain(`>${TEXT.fr.jobs[s].tile}</span>`);
+      expect(tile, s).toContain(`>${formatCents(need.cents, "fr")}</span>`);
     }
   });
 
