@@ -33,7 +33,7 @@ export function FaqBand({ copy, id }: { copy: Copy; id: string }) {
         <h2 className={`${TYPE.h2} text-ink`}>{t.faqTitle}</h2>
       </div>
       <div className="mx-auto max-w-[760px]">
-        <Faq items={t.faqs} id={`${id}-list`} className="mt-5 md:mt-10" classNames={ITEMS} />
+        <Faq items={t.faqs} id={`${id}-list`} open={0} className="mt-5 md:mt-10" classNames={ITEMS} />
         {(whatsapp || phone) && (
           <div className="mt-10 flex flex-wrap items-center justify-center gap-2">
             <p className="text-sm leading-[1.45] text-ink-mid">{t.faqMore}</p>

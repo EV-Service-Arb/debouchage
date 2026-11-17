@@ -2,16 +2,14 @@ import { mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { MIN_FILL_MS } from "@/shared/lib/sites-tools";
-import { bookingRoute, quoteRoute } from "@/shared/lib/sites-tools/next";
+import { quoteRoute } from "@/shared/lib/sites-tools/next";
 import { leadNotifier, leadWebhook, parseServerEnv } from "@/shared/lib/sites-tools/server";
 import { isSubject, PANEL_NEED } from "@/shared/config/lead";
 import { site } from "@/shared/config/site";
 
 export interface PanelHarness {
   /** A lead through the real quote route, as the card's script posts it; the JSON answer. */
-  post(fields: Record<string, string>): Promise<{ status: number; body: { ok: boolean; lead?: unknown; cents?: unknown } }>;
-  /** A booking request through the real booking route. */
-  book(body: Record<string, unknown>): Promise<{ status: number; body: { ok: boolean; queued?: boolean } }>;
+  post(fields: Record<string, string>): Promise<{ status: number; body: { ok: boolean; lead?: unknown; cents?: unknown; slot?: unknown } }>;
   /** Runs the outbox until it has nothing due; every body the panel received, in order. */
   deliver(): Promise<unknown[]>;
   close(): void;
@@ -20,8 +18,8 @@ export interface PanelHarness {
 const RENDERED_AT = Date.UTC(2026, 9, 4, 9);
 
 /**
- * The site's quote and booking routes over one leads file and the lead
- * webhook, the panel a fetch that accepts everything and keeps the bodies.
+ * The site's quote route over a leads file and the lead webhook, the panel a
+ * fetch that accepts everything and keeps the bodies.
  */
 export function panelHarness(): PanelHarness {
   const dir = mkdtempSync(join(tmpdir(), "debouchage-panel-"));
@@ -52,7 +50,6 @@ export function panelHarness(): PanelHarness {
     now,
     unavailable: () => ({ title: "", heading: "", body: "", callLabel: "" }),
   });
-  const booking = bookingRoute({ env: () => env, webhook: () => hook, now, log: quiet });
 
   return {
     async post(fields) {
@@ -60,12 +57,6 @@ export function panelHarness(): PanelHarness {
       const all = { location: "clermont-ferrand", locale: "fr", form_id: "quote", t: String(RENDERED_AT), ...fields };
       for (const [k, v] of Object.entries(all)) form.set(k, v);
       const response = await quote(new Request("http://localhost/quote", { method: "POST", body: form, headers: { accept: "application/json" } }));
-      return { status: response.status, body: (await response.json()) as { ok: boolean } };
-    },
-    async book(body) {
-      const response = await booking(
-        new Request("http://localhost/quote/booking", { method: "POST", body: JSON.stringify(body), headers: { "content-type": "application/json" } }),
-      );
       return { status: response.status, body: (await response.json()) as { ok: boolean } };
     },
     async deliver() {

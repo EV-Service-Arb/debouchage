@@ -1,6 +1,6 @@
 import { fillText, formatCents, whatsappHref } from "@/shared/lib/sites-tools";
 import type { LeadSent } from "@/shared/lib/sites-tools/react";
-import type { Subject, When } from "@/shared/config/lead";
+import { EXTRAS, isSubject, LEAD, WHEN, type When } from "@/shared/config/lead";
 import { Icon } from "@/shared/ui/Icon";
 
 /** The card's words once a lead is taken: plain strings, they cross into the client island. */
@@ -11,6 +11,9 @@ export interface DoneText {
   rows: { job: string; arrival: string; price: string; payment: string };
   jobs: Readonly<Record<string, string>>;
   arrival: Readonly<Record<When, string>>;
+  arrivalSlot: string;
+  today: string;
+  parts: Readonly<Record<"morning" | "afternoon" | "evening", string>>;
   priceValue: string;
   payment: string;
   photo: string;
@@ -20,17 +23,29 @@ export interface DoneText {
   callbackBody: string;
 }
 
+/** The slot kept with the lead in the visitor's words — today by name, another day by its date — else what `when` promises. */
+function arrivalOf(text: DoneText, when: When, sent: LeadSent, locale: string): string {
+  const { date, part } = sent.slot ?? {};
+  if (date === undefined || part === undefined) return text.arrival[when];
+  const day = when === "today" ? text.today : new Intl.DateTimeFormat(locale, { weekday: "long", day: "numeric", month: "long", timeZone: "UTC" }).format(new Date(`${date}T12:00:00Z`));
+  return fillText(text.arrivalSlot, { day, part: text.parts[part] });
+}
+
 /**
  * The card's last state (Figma BookingCard Step=Done 5:255): the first name,
  * the call that confirms, the booking as a table — the job, when, the price
  * the server took the lead at, how to pay — and a photo of the problem on the
  * place's WhatsApp when it has one. `LeadCapture` puts it in the card's place
- * with the focus and `role="status"`; the kit's price line and slot follow it
- * (`order-*`: the photo and the note stay last). A row the lead did not
- * answer is not drawn.
+ * with the focus and `role="status"`; the kit's price line follows it
+ * (`order-*`: the photo and the note stay last). The arrival is the slot
+ * the server kept, else what `when` promises; a row the lead did not answer
+ * is not drawn.
  */
-export function BookingDone(props: { text: DoneText; sent: LeadSent; subject: Subject | null; when: When | null; whatsapp: string | null; locale: string }) {
-  const { text, sent, subject, when } = props;
+export function BookingDone(props: { text: DoneText; sent: LeadSent; whatsapp: string | null; locale: string }) {
+  const { text, sent } = props;
+  const posted = sent.fields[LEAD.wire.subject];
+  const subject = posted !== undefined && isSubject(posted) ? posted : null;
+  const when = WHEN.find(w => w === sent.fields[EXTRAS.when.name]) ?? null;
   if (sent.channel === "callback") {
     return (
       <div className="flex flex-col gap-2">
@@ -41,7 +56,7 @@ export function BookingDone(props: { text: DoneText; sent: LeadSent; subject: Su
   }
   const rows = [
     subject && { label: text.rows.job, value: text.jobs[subject] },
-    when && { label: text.rows.arrival, value: text.arrival[when] },
+    when && { label: text.rows.arrival, value: arrivalOf(text, when, sent, props.locale) },
     sent.cents !== undefined && { label: text.rows.price, value: fillText(text.priceValue, { price: formatCents(sent.cents, props.locale) }) },
     { label: text.rows.payment, value: text.payment },
   ].filter(row => typeof row === "object" && row !== null);

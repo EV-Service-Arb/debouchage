@@ -45,20 +45,26 @@ describe("a booking's answers", () => {
   });
 });
 
-describe("a booking's slot preference", () => {
-  it("goes to the panel after its lead, joined by the lead's reference", async () => {
-    harness = panelHarness();
-    const { body } = await harness.post({ ...BOOKING, submission_id: SUBMISSION });
-    if (!isLeadRef(body.lead)) throw new Error("no lead reference");
-    const answer = await harness.book({ submission: SUBMISSION, lead_ref: body.lead, provider: "manual", preferred_date: "2026-11-19", preferred_part: "afternoon" });
-    expect(answer).toEqual({ status: 200, body: { ok: true, queued: true } });
-    const [created, requested, ...rest] = (await harness.deliver()).map(eventOf);
+describe("a booking's slot", () => {
+  // The harness's day: 4 October 2026.
+  it("goes with the lead, then to the panel behind it as booking.requested, joined by the lead's reference", async () => {
+    const { answer, sent } = await check({ ...BOOKING, when: "today", preferred_date: "2026-10-04", preferred_part: "afternoon" });
+    expect(answer).toMatchObject({ status: 200, body: { ok: true, slot: { date: "2026-10-04", part: "afternoon" } } });
+    const lead = answer.body.lead;
+    if (!isLeadRef(lead)) throw new Error("no lead reference");
+    const [created, requested, ...rest] = sent;
     expect(rest).toEqual([]);
-    expect(created).toMatchObject({ type: "lead.created", subject: { leadId: body.lead } });
+    expect(created).toMatchObject({ type: "lead.created", subject: { leadId: lead }, pii: { when: "today" } });
     expect(requested).toMatchObject({
       type: "booking.requested",
-      subject: { leadId: body.lead },
-      properties: { lead_ref: body.lead, provider: "manual", preferred_date: "2026-11-19", preferred_part: "afternoon" },
+      subject: { leadId: lead },
+      properties: { lead_ref: lead, provider: "manual", preferred_date: "2026-10-04", preferred_part: "afternoon" },
     });
+  });
+
+  it("is none for « au plus vite », which the call sets", async () => {
+    const { answer, sent } = await check({ ...BOOKING, when: "asap" });
+    expect(answer.body).not.toHaveProperty("slot");
+    expect(sent.map(e => e?.type)).toEqual(["lead.created"]);
   });
 });

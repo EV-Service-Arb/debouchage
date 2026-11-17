@@ -31,8 +31,7 @@ export default defineConfig({
       env: { E2E_MOCK_PORT: String(MOCK_PORT) },
     },
     {
-      // Next keeps the ISR pages it rendered in the standalone tree, and a build
-      // in place does not clear them: a run would be served the last build's pages.
+      // Next keeps the ISR pages it rendered in the standalone tree: a run would be served the last run's.
       command: `rm -rf "${dirname(LEADS_DB)}" .next/standalone/.next/server/route-cache && mkdir -p "${dirname(LEADS_DB)}" && node .next/standalone/server.js`,
       cwd: "../..",
       url: `http://localhost:${PORT}/health`,

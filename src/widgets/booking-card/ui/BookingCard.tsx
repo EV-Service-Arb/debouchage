@@ -1,17 +1,18 @@
-import { formatCents, type Place, type PricingModel } from "@/shared/lib/sites-tools";
+import type { Place, PricingModel } from "@/shared/lib/sites-tools";
 import type { ReactNode } from "react";
 import { leadCaptureText, type Copy } from "@/entities/content";
-import { CONFIRM, EXTRAS, FLOWS, LEAD, SUBJECTS, WHEN, type Confirm, type Subject, type When } from "@/shared/config/lead";
-import { jobPrices } from "@/shared/lib/job-prices";
+import { CONFIRM, EXTRAS, FLOWS, LEAD, SUBJECTS, WHEN, type Confirm, type When } from "@/shared/config/lead";
 import { Icon, JOB_ICON, type IconName } from "@/shared/ui";
 import { BookingCapture } from "./BookingCapture";
 import type { DoneText } from "./BookingDone";
 import { LOOK, TILE } from "./look";
 
 const WHEN_ICON: Readonly<Record<When, IconName>> = { asap: "zap", today: "clock", later: "calendar" };
+/** « Aujourd’hui » and « autre jour » ask the slot before the contact; « au plus vite » is set on the call. */
+const WHEN_SLOT: Readonly<Record<When, "today" | "later" | undefined>> = { asap: undefined, today: "today", later: "later" };
 const CONFIRM_ICON: Readonly<Record<Confirm, IconName>> = { call: "phone", whatsapp: "whatsapp", sms: "message" };
 
-const icon = (name: IconName): ReactNode => <Icon name={name} className="size-[22px]" />;
+const icon = (name: IconName): ReactNode => <Icon name={name} className="size-[22px] text-ink" />;
 
 const Check = ({ children }: { children: string }) => (
   <li className="flex items-center gap-1 text-xs leading-[1.4] whitespace-nowrap text-ink-soft">
@@ -32,23 +33,26 @@ export interface BookingCardProps {
   pricing: PricingModel | null;
 }
 
+const Head = ({ title, lede, as: As = "p" }: { title: string; lede: string; as?: "h2" | "p" }) => (
+  <div className="flex flex-col gap-1">
+    <As className="font-serif text-[26px] leading-[1.15] font-bold tracking-[-0.005em] text-ink">{title}</As>
+    <p className="text-sm leading-[1.45] text-ink-mid">{lede}</p>
+  </div>
+);
+
 /**
- * The frame's BookingCard (5:282) on the kit's `LeadCapture`, one question a
- * screen (`steps`): when (the kit's `intro`, posted as the extra `when`),
- * what — the price list's six jobs as tiles, each a fixed price the server
- * prices again — then the contact: first name, phone, address and how to
- * confirm (the extra `confirm`), the price and « Réserver ». Without a script
- * every screen is in the form at once and it posts as one. The tile's second
- * line is its price (`jobPrices`): the kit draws a need as one label.
+ * The frame's BookingCard (5:282) on the kit's `LeadCapture`, its screens
+ * the frame's: what is blocked — the price list's six jobs, each at the
+ * price the server charges — and when (the kit's `intro`, posted as the
+ * extra `when`) on the first, with « Continuer »; the slot for « aujourd’hui »
+ * and « autre jour », sent on as `booking.requested`; then the first name,
+ * the phone, the address and how to confirm (the extra `confirm`), the
+ * price on the submit. Without a script every screen is in the form at once
+ * and it posts as one.
  */
 export function BookingCard({ copy, id, place, contact, renderedAt, pricing }: BookingCardProps) {
   const { t, locale } = copy;
   const c = t.card;
-  const prices = jobPrices(pricing);
-  const tileLabel = (s: Subject) => {
-    const cents = prices[s];
-    return cents === null ? t.jobs[s].tile : `${t.jobs[s].tile}\n${formatCents(cents, locale)}`;
-  };
   const done: DoneText = {
     title: c.done.title,
     titleAnonymous: c.done.titleAnonymous,
@@ -56,6 +60,9 @@ export function BookingCard({ copy, id, place, contact, renderedAt, pricing }: B
     rows: c.done.rows,
     jobs: Object.fromEntries(SUBJECTS.map(s => [s, t.jobs[s].name])),
     arrival: c.done.arrival,
+    arrivalSlot: c.done.arrivalSlot,
+    today: c.done.today,
+    parts: c.done.parts,
     priceValue: c.done.priceValue,
     payment: c.done.payment,
     photo: c.done.photo,
@@ -64,51 +71,50 @@ export function BookingCard({ copy, id, place, contact, renderedAt, pricing }: B
     callbackTitle: c.done.callbackTitle,
     callbackBody: c.done.callbackBody,
   };
-  // Shown on the first two screens only, the contact's on the last: whole class names, for Tailwind to see.
-  const offContact = "group-has-[[data-lead-step=phone]:not([data-lead-off])]/card:hidden";
-  const onContact = "hidden group-has-[[data-lead-step=phone]:not([data-lead-off])]/card:flex";
   return (
     <BookingCapture
       id={id}
-      className="light group/card relative rounded-3xl bg-background text-ink shadow-[0_24px_30px_rgba(0,0,0,0.28)] p-4 sm:p-5 lg:p-7"
+      className="light relative rounded-3xl bg-background text-ink shadow-[0_24px_30px_rgba(0,0,0,0.28)] p-4 sm:p-5 lg:p-7"
       place={place}
       contact={contact}
       locale={locale}
       renderedAt={renderedAt}
       wire={LEAD.wire}
-      needs={SUBJECTS.map(s => ({ value: s, label: tileLabel(s), icon: icon(JOB_ICON[s]) }))}
+      needs={SUBJECTS.map(s => ({ value: s, label: t.jobs[s].tile, icon: icon(JOB_ICON[s]) }))}
       needDisplay="cards"
       flows={FLOWS}
       pricing={pricing}
       layout="steps"
-      localityStep="with-phone"
       intro={{
         label: c.whenLabel,
         field: EXTRAS.when.name,
-        options: WHEN.map(w => ({ value: w, label: `${c.when[w].label}\n${c.when[w].hint}`, icon: icon(WHEN_ICON[w]) })),
+        options: WHEN.map(w => ({ value: w, label: c.when[w].label, hint: c.when[w].hint, icon: icon(WHEN_ICON[w]), slot: WHEN_SLOT[w] })),
       }}
+      screens={[
+        {
+          ask: ["need", "intro"],
+          head: (
+            <>
+              <Head as="h2" title={c.title} lede={c.lede} />
+              <ul className="order-last flex flex-wrap justify-center gap-x-3.5 gap-y-1">
+                {c.reassurance.map(line => (
+                  <Check key={line}>{line}</Check>
+                ))}
+              </ul>
+            </>
+          ),
+        },
+        { ask: ["slot"], head: <Head title={c.slotTitle} lede={c.slotLede} /> },
+        { ask: ["name", "phone", "locality"], head: <Head title={c.contactTitle} lede={c.contactLede} /> },
+      ]}
       name={{ field: EXTRAS.name.name }}
+      locality={{ ask: "address" }}
       price="compact"
       prefer="form"
       labels="hidden"
       text={leadCaptureText(t, locale)}
-      head={
-        <>
-          <div className={`flex flex-col gap-1 ${offContact}`}>
-            <h2 className="font-serif text-[26px] leading-[1.15] font-bold tracking-[-0.005em] text-ink">{c.title}</h2>
-            <p className="text-sm leading-[1.45] text-ink-mid">{c.lede}</p>
-          </div>
-          <div className={`flex-col gap-1 ${onContact}`}>
-            <p className="font-serif text-[26px] leading-[1.15] font-bold tracking-[-0.005em] text-ink">{c.contactTitle}</p>
-            <p className="text-sm leading-[1.45] text-ink-mid">{c.contactLede}</p>
-          </div>
-          <ul className={`order-last flex flex-wrap justify-center gap-x-3.5 gap-y-1 ${offContact}`}>
-            {c.reassurance.map(line => (
-              <Check key={line}>{line}</Check>
-            ))}
-          </ul>
-        </>
-      }
+      // Every slot is asked on the screens, and the call confirms it: nothing after the booking.
+      booking={null}
       extras={
         <fieldset className="flex flex-col gap-0">
           <legend className="mb-2.5 text-sm leading-[1.25] font-semibold text-ink">{c.confirmLabel}</legend>

@@ -108,6 +108,14 @@ export interface Text extends CoreText<PageKey, Facts> {
     lede: string;
     contactTitle: string;
     contactLede: string;
+    /** The slot's screen, after « aujourd’hui » or « autre jour ». */
+    slotTitle: string;
+    slotLede: string;
+    slotDay: string;
+    slotPart: string;
+    /** The day tiles' names for today and tomorrow, over their date. */
+    slotToday: string;
+    slotTomorrow: string;
     needLabel: string;
     whenLabel: string;
     when: Record<When, { label: string; hint: string }>;
@@ -117,6 +125,8 @@ export interface Text extends CoreText<PageKey, Facts> {
     placeholders: { name: string; phone: string; address: string };
     /** `{price}` the job's fixed price. */
     priceLine: string;
+    /** The submit once the job is chosen, `{price}` its price. */
+    submitPrice: string;
     pricePending: string;
     reassurance: readonly string[];
     trust: readonly string[];
@@ -128,6 +138,10 @@ export interface Text extends CoreText<PageKey, Facts> {
       call: readonly [string, string];
       rows: { job: string; arrival: string; price: string; payment: string };
       arrival: Record<When, string>;
+      /** The slot kept with the booking: `{day}` today's word or the date, `{part}` the part of the day. */
+      arrivalSlot: string;
+      today: string;
+      parts: Record<"morning" | "afternoon" | "evening", string>;
       /** `{price}` the price the server took the lead at. */
       priceValue: string;
       payment: string;
