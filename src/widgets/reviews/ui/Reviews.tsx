@@ -5,8 +5,8 @@ import { BandHead, Icon, Stars } from "@/shared/ui";
 /**
  * The frame's Reviews (9:402 / Mobile 13:707): Google's aggregate and three
  * named reviews, a four-star one among them on purpose. From `lg` the
- * aggregate is a column beside three cards; on a phone it is one row, and
- * the cards scroll sideways (`snap`), each nearly the screen's width. All of
+ * aggregate is a column beside three cards; on a phone it is one row over
+ * the cards, stacked. All of
  * it is the frame's sample (OWNER_TODO "reviews"), and nothing of it reaches
  * the structured data. The frame's « Voir sur Google » waits for the place's
  * Google page: there is none to link to yet.
@@ -26,11 +26,11 @@ export function Reviews({ copy, id }: { copy: Copy; id: string }) {
           </div>
           <p className="mt-3.5 hidden text-sm leading-[1.45] text-ink-mid lg:block">{r.note}</p>
         </div>
-        <ul className="-mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-2 md:mx-0 md:grid md:grid-cols-3 md:overflow-visible md:px-0 md:pb-0 lg:gap-5">
+        <ul className="grid min-w-0 gap-5 md:grid-cols-3">
           {REVIEWS.map(({ key, stars }) => {
             const review = r.items[key];
             return (
-              <li key={key} className="flex w-[85%] shrink-0 snap-start flex-col gap-3.5 rounded-[20px] border border-border bg-background p-[19px] md:w-auto md:p-6">
+              <li key={key} className="flex flex-col gap-3.5 rounded-[20px] border border-border bg-background p-[19px] md:p-6">
                 <div className="flex items-center gap-2.5 md:gap-3">
                   <span aria-hidden="true" className="flex size-9 shrink-0 items-center justify-center rounded-full bg-muted text-sm leading-[1.25] font-bold text-ink md:size-10 md:text-base">
                     {review.name.charAt(0)}

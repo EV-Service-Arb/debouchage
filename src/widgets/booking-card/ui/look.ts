@@ -11,7 +11,7 @@ export type Look = Readonly<Partial<Record<LeadCapturePart, string>>>;
  * first, the price or the hint at 12 ink-mid under it.
  */
 export const TILE =
-  "relative h-full flex-col items-start justify-start gap-1.5 rounded-xl border-[1.5px] border-input bg-background p-3 text-left text-xs leading-[1.4] whitespace-pre-line text-ink-mid peer-checked:border-ink peer-checked:bg-primary/20 peer-checked:shadow-[inset_0_0_0_0.5px_var(--ink)] first-line:text-sm first-line:leading-[1.7] first-line:font-semibold first-line:text-ink [&_.dr-icon]:size-[22px] [&_.dr-icon]:text-ink";
+  "h-full flex-col items-start justify-start gap-1.5 rounded-xl border-[1.5px] border-input bg-background p-3 text-left text-xs leading-[1.4] whitespace-pre-line text-ink-mid peer-checked:border-ink peer-checked:bg-primary/20 peer-checked:shadow-[inset_0_0_0_0.5px_var(--ink)] [&>span:last-child]:first-line:text-sm [&>span:last-child]:first-line:leading-[1.7] [&>span:last-child]:first-line:font-semibold [&>span:last-child]:first-line:text-ink [&_.dr-icon]:size-[22px] [&_.dr-icon]:text-ink";
 
 /** The frame's Field (4:109 – 4:115): 52 px, a 1.5 px `input` edge, 12 round, 16 px text; a 2 px ring on focus. */
 export const FIELD =

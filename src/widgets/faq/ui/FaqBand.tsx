@@ -28,11 +28,11 @@ export function FaqBand({ copy, id }: { copy: Copy; id: string }) {
   const whatsapp = whatsappLink(f.whatsapp, t.whatsappMessage(f));
   return (
     <Section surface="card" id={id} data-band="faq" className="py-14 md:py-24">
+      <div className="flex flex-col gap-3 md:items-center md:text-center">
+        <p className={`${TYPE.eyebrow} text-primary-ink`}>{t.faqEyebrow}</p>
+        <h2 className={`${TYPE.h2} text-ink`}>{t.faqTitle}</h2>
+      </div>
       <div className="mx-auto max-w-[760px]">
-        <div className="flex flex-col gap-3 md:items-center md:text-center">
-          <p className={`${TYPE.eyebrow} text-primary-ink`}>{t.faqEyebrow}</p>
-          <h2 className={`${TYPE.h2} text-ink`}>{t.faqTitle}</h2>
-        </div>
         <Faq items={t.faqs} id={`${id}-list`} className="mt-5 md:mt-10" classNames={ITEMS} />
         {(whatsapp || phone) && (
           <div className="mt-10 flex flex-wrap items-center justify-center gap-2">

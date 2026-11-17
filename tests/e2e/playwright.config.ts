@@ -1,21 +1,28 @@
+import { dirname } from "node:path";
 import { defineConfig, devices } from "@playwright/test";
 import { BREAKPOINTS } from "../../src/shared/lib/sites-tools/testing-e2e";
+import { LEADS_DB, MOCK_PORT, PORT, POSTHOG_HOST, SITES_PANEL_INTERNAL_URL } from "./env";
 
-// The standalone server under test, never `next dev`. Baselines are Linux's
-// (CI's); elsewhere the pixel comparison is skipped.
-const PORT = Number(process.env["E2E_PORT"] ?? 59089);
-// The panel stand-in (`mock-panel.mjs`): the live place and the price list.
-const MOCK_PORT = Number(process.env["E2E_MOCK_PORT"] ?? PORT + 1);
+// Run through the flake (`nix run .#test`), which supplies `@playwright/test`
+// and the nixpkgs-pinned browsers — the pin is what makes a screenshot render
+// alike on every machine of one OS. Baselines are Linux's; elsewhere the pixel
+// comparison is skipped rather than failed against another OS's rasteriser.
 const linux = process.platform === "linux";
 
 export default defineConfig({
   testDir: ".",
   snapshotPathTemplate: "{testDir}/__screenshots__/{arg}{ext}",
   ignoreSnapshots: !linux,
+  fullyParallel: true,
+  forbidOnly: !!process.env["CI"],
   retries: 0,
+  outputDir: "../../test-results",
+  reporter: process.env["CI"] ? [["github"], ["list"]] : [["list"]],
   expect: { toHaveScreenshot: { maxDiffPixelRatio: 0.01, animations: "disabled", stylePath: "./screenshot-section.css" } },
   use: { baseURL: `http://localhost:${PORT}`, deviceScaleFactor: 1, colorScheme: "light", locale: "fr-FR" },
+  // The two breakpoints the design draws: 1440 and 390.
   projects: BREAKPOINTS.map(b => ({ name: b.name, use: { ...devices["Desktop Chrome"], viewport: b.viewport } })),
+  // The artefact that ships, not `next dev`: `npm run build` first.
   webServer: [
     {
       command: "node mock-panel.mjs",
@@ -24,18 +31,23 @@ export default defineConfig({
       env: { E2E_MOCK_PORT: String(MOCK_PORT) },
     },
     {
-      command: "node .next/standalone/server.js",
+      // Next keeps the ISR pages it rendered in the standalone tree, and a build
+      // in place does not clear them: a run would be served the last build's pages.
+      command: `rm -rf "${dirname(LEADS_DB)}" .next/standalone/.next/server/route-cache && mkdir -p "${dirname(LEADS_DB)}" && node .next/standalone/server.js`,
       cwd: "../..",
       url: `http://localhost:${PORT}/health`,
       reuseExistingServer: false,
-      // The prod server refuses to boot without these (instrumentation.ts); on
-      // loopback the one hop is the runner itself.
+      timeout: 60_000,
+      // The standalone server runs as production, which refuses to boot without
+      // knowing whose address the rate limit counts; on loopback the one hop is the runner.
       env: {
         PORT: String(PORT),
         HOSTNAME: "127.0.0.1",
-        LEADS_DB_PATH: `/tmp/brand-e2e-${PORT}/leads.db`,
+        LEADS_DB_PATH: LEADS_DB,
         TRUSTED_PROXY: "xff:1",
-        SITES_PANEL_INTERNAL_URL: `http://127.0.0.1:${MOCK_PORT}/api/internal`,
+        POSTHOG_KEY: "phc_e2e",
+        POSTHOG_HOST,
+        SITES_PANEL_INTERNAL_URL,
       },
     },
   ],

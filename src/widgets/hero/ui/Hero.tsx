@@ -31,7 +31,7 @@ export function Hero({ copy, card }: { copy: Copy; card: ReactNode }) {
             <span className="lg:hidden">{h.eyebrowShort}</span>
           </p>
           <h1 className={`${TYPE.h1} text-ink`}>
-            {h.title[0]} {h.title[1]} <span className="text-primary lg:block">{h.accent}</span>
+            <span className="lg:block">{h.title[0]}</span> <span className="lg:block">{h.title[1]}</span> <span className="block text-primary">{h.accent}</span>
           </h1>
           <p className="text-base leading-[1.5] text-ink-mid lg:text-lg lg:leading-[1.55]">
             <span className="hidden lg:inline">{h.lede}</span>
