@@ -11,7 +11,7 @@ const read = (path: string) => readFileSync(join(root, path), "utf8");
 describe("the brand palette", () => {
   it("is the generator's output for assets/brand.toml, byte for byte", () => {
     const contract = readContract(read("node_modules/@evinvest/uikit/styles/tokens.css"));
-    const expected = renderPalette("vifnet", brandFromToml(read("assets/brand.toml")), contract, "brand.toml");
+    const expected = renderPalette("debouchage", brandFromToml(read("assets/brand.toml")), contract, "brand.toml");
     expect(read("app/brand.css")).toBe(expected);
   });
 });
