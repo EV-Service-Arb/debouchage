@@ -77,7 +77,7 @@ export const EN = {
   },
   availability: {
     now: "A technician is available now · estimated arrival 45 min",
-    nowShort: "Technician available · arrival ≈ 45 min",
+    nowShort: "Technician available · arrival about 45 min",
     hours: "7 days · 6 am – 11 pm · Clermont-Ferrand and 20 km around",
   },
   hero: {
@@ -106,7 +106,7 @@ export const EN = {
     needLabel: "What is blocked?",
     whenLabel: "When should we come?",
     when: {
-      asap: { label: "As soon as possible", hint: "≈ 45 min" },
+      asap: { label: "As soon as possible", hint: "about 45 min" },
       today: { label: "Today", hint: "at a time you pick" },
       later: { label: "Another day", hint: "on a day you pick" },
     },
@@ -123,7 +123,7 @@ export const EN = {
       titleAnonymous: "You're booked.",
       call: ["A technician calls you on ", " within 5 minutes to confirm the price and the time."],
       rows: { job: "Job", arrival: "Arrival", price: "Fixed price", payment: "Payment" },
-      arrival: { asap: "As soon as possible, ≈ 45 min", today: "Today, time confirmed on the call", later: "The day confirmed on the call" },
+      arrival: { asap: "As soon as possible, about 45 min", today: "Today, time confirmed on the call", later: "The day confirmed on the call" },
       priceValue: "{price} incl. VAT and travel",
       payment: "After the job · card or cash",
       photo: "Send a photo of the problem",
@@ -307,7 +307,7 @@ export const EN = {
   },
   proof: {
     rating: "4.9 · 212 reviews",
-    lines: ["Technician available · arrival ≈ 45 min", "Fixed price confirmed before we travel", "Not cleared = not charged"],
+    lines: ["Technician available · arrival about 45 min", "Fixed price confirmed before we travel", "Not cleared = not charged"],
     cta: "Book my job",
   },
   included: [

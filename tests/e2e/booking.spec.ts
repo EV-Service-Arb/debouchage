@@ -70,7 +70,7 @@ test("when, what, who: one tap a question, the price on the last screen, booked 
   await expect(done).toBeFocused();
   await expect(done).toContainText("C’est réservé, Sophie.");
   await expect(done).toContainText(/109\s€ TTC, déplacement inclus/);
-  await expect(done).toContainText("Au plus vite, ≈ 45 min");
+  await expect(done).toContainText("Au plus vite, env. 45 min");
   // « Au plus vite » is set on the call: no slot to prefer.
   await expect(done.getByRole("button", { name: "Envoyer ma préférence" })).toHaveCount(0);
   expect(leadRow(mobile)).toEqual({

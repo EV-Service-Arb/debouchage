@@ -81,7 +81,7 @@ export const FR = {
   },
   availability: {
     now: "Un technicien est disponible maintenant · arrivée estimée 45 min",
-    nowShort: "Technicien disponible · arrivée ≈ 45 min",
+    nowShort: "Technicien disponible · arrivée env. 45 min",
     hours: "7 j/7 · 6 h – 23 h · Clermont-Ferrand et 20 km autour",
   },
   hero: {
@@ -110,7 +110,7 @@ export const FR = {
     needLabel: "Qu’est-ce qui est bouché ?",
     whenLabel: "Quand voulez-vous qu’on passe ?",
     when: {
-      asap: { label: "Au plus vite", hint: "≈ 45 min" },
+      asap: { label: "Au plus vite", hint: "env. 45 min" },
       today: { label: "Aujourd’hui", hint: "heure au choix" },
       later: { label: "Autre jour", hint: "jour au choix" },
     },
@@ -127,7 +127,7 @@ export const FR = {
       titleAnonymous: "C’est réservé.",
       call: ["Un technicien vous appelle au ", " dans les 5 minutes pour confirmer le prix et l’heure."],
       rows: { job: "Intervention", arrival: "Arrivée", price: "Prix fixe", payment: "Paiement" },
-      arrival: { asap: "Au plus vite, ≈ 45 min", today: "Aujourd’hui, heure confirmée à l’appel", later: "Le jour confirmé à l’appel" },
+      arrival: { asap: "Au plus vite, env. 45 min", today: "Aujourd’hui, heure confirmée à l’appel", later: "Le jour confirmé à l’appel" },
       priceValue: "{price} TTC, déplacement inclus",
       payment: "Après le débouchage · CB ou espèces",
       photo: "Envoyer une photo du problème",
@@ -321,7 +321,7 @@ export const FR = {
   },
   proof: {
     rating: "4,9 · 212 avis",
-    lines: ["Technicien disponible · arrivée ≈ 45 min", "Prix fixe confirmé avant le déplacement", "Pas débouché = pas facturé"],
+    lines: ["Technicien disponible · arrivée env. 45 min", "Prix fixe confirmé avant le déplacement", "Pas débouché = pas facturé"],
     cta: "Réserver mon intervention",
   },
   included: [
