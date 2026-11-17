@@ -6,6 +6,6 @@ import { cardFact } from "@/shared/lib/sites-tools";
  * places) to do it. Inlined at build from `assets/card.toml`.
  */
 export const BRAND_PUBLIC = {
-  name: "Brand",
+  name: "Débouchage Rapide Clermont-Ferrand",
   phone: cardFact("SITE_CARD_PHONE", process.env.SITE_CARD_PHONE),
 } as const;

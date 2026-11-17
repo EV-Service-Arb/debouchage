@@ -1,8 +1,7 @@
-import { AbSwitcher, AnalyticsBoundary } from "@/shared/lib/sites-tools/react";
+import { AnalyticsBoundary } from "@/shared/lib/sites-tools/react";
 import type { ReactNode } from "react";
 import { loadPlace } from "@/views/place/server";
 import { serverEnv } from "@/shared/config/env";
-import { EXPERIMENTS, QA_COOKIE } from "@/shared/config/experiments";
 import { site } from "@/shared/config/site";
 
 /**
@@ -23,10 +22,8 @@ export default async function PlaceLayout({ children, params }: { children: Reac
   const env = serverEnv();
   // The key is read from the container when the page renders, never inlined.
   return (
-    <AnalyticsBoundary target={{ key: env.posthogKey, host: env.posthogHost, brandId: site.brand.id }} placeSlug={view.place.slug} qaCookie={QA_COOKIE}>
+    <AnalyticsBoundary target={{ key: env.posthogKey, host: env.posthogHost, brandId: site.brand.id }} placeSlug={view.place.slug}>
       {children}
-      {/* Above the phone's call bar; nothing at all for a visit without the QA cookie. */}
-      <AbSwitcher experiments={EXPERIMENTS} qaCookie={QA_COOKIE} className="bottom-20 md:bottom-4" />
     </AnalyticsBoundary>
   );
 }

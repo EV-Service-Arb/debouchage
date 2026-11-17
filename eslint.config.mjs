@@ -9,7 +9,16 @@ export default defineConfig([
   ...nextTs,
   {
     // The client boundaries; add a client module here when you write one.
-    files: ["src/views/not-found/ui/NotFound.tsx", "src/views/server-error/**", "app/**/error.tsx", "app/**/not-found.tsx"],
+    files: [
+      "src/views/not-found/ui/NotFound.tsx",
+      "src/views/server-error/**",
+      "src/widgets/booking-card/ui/BookingCapture.tsx",
+      "src/widgets/booking-card/ui/BookingDone.tsx",
+      "src/widgets/sticky-bar/ui/Reveal.tsx",
+      "src/shared/ui/DetailsDismiss.tsx",
+      "app/**/error.tsx",
+      "app/**/not-found.tsx",
+    ],
     rules: {
       "no-restricted-imports": [
         "error",
@@ -24,5 +33,5 @@ export default defineConfig([
       ],
     },
   },
-  globalIgnores([".next/**", "node_modules/**", "next-env.d.ts"]),
+  globalIgnores([".next/**", "node_modules/**", "next-env.d.ts", "docs/**"]),
 ]);

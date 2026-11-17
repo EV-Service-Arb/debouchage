@@ -1,62 +1,71 @@
-import { contactOf, placeGraph, type PlaceView, type PricingModel } from "@/shared/lib/sites-tools";
-import { CallBar, Coverage, Display, Faq, JsonLd, LeadCapture, Section } from "@/shared/lib/sites-tools/react";
+import { contactOf, faqPageNode, placeGraph, type PlaceView, type PricingModel } from "@/shared/lib/sites-tools";
+import { JsonLd } from "@/shared/lib/sites-tools/react";
 import type { Copy } from "@/entities/content";
 import type { Locale } from "@/shared/config/i18n";
-import { LEAD, PHOTO_NEEDS } from "@/shared/config/lead";
+import { ANCHORS, placeNav } from "@/shared/config/nav";
 import { site } from "@/shared/config/site";
+import { jobPrices, lowestPrice } from "@/shared/lib/job-prices";
+import { AvailabilityBar } from "@/widgets/availability-bar";
+import { BookingCard } from "@/widgets/booking-card";
+import { Closing } from "@/widgets/closing";
+import { FaqBand } from "@/widgets/faq";
+import { GuaranteeBand } from "@/widgets/guarantee-band";
+import { Hero } from "@/widgets/hero";
+import { HowItWorks } from "@/widgets/how-it-works";
+import { PriceList } from "@/widgets/price-list";
+import { Reviews } from "@/widgets/reviews";
+import { ServiceArea } from "@/widgets/service-area";
+import { SiteFooter } from "@/widgets/site-footer";
+import { SiteHeader } from "@/widgets/site-header";
+import { Stats } from "@/widgets/stats";
+import { StickyBar } from "@/widgets/sticky-bar";
+
+/** The anchors the page links to, and the e2e sections are shot by. */
+export const SECTION_IDS = { ...ANCHORS, closing: "demande" } as const;
+
+export interface PlaceHomeProps {
+  view: PlaceView<Locale>;
+  copy: Copy;
+  renderedAt: number;
+  /** The price list the card prices from and the page states: the panel's, else the baked one. */
+  pricing: PricingModel | null;
+}
 
 /**
- * A place's home page: the brand's own hero, the package's structural
- * widgets, and the JSON-LD derived from the same copy. Replace the hero with
- * the brand's sections; the form is the kit's `LeadCapture`, posting under
- * `site.lead.wire` — restyle it through `classNames`, drive `layout` and
- * `prefer` from an experiment.
+ * The home page: the Figma frame (Desktop 1440 7:174, Mobile 390 11:524) in
+ * its order. The structured data is built from `site` and the place only —
+ * never from the frame's sample rating, reviews or phone.
  */
-export function PlaceHome({ view, copy, renderedAt, model }: { view: PlaceView<Locale>; copy: Copy; renderedAt: number; model: PricingModel | null }) {
+export function PlaceHome({ view, copy, renderedAt, pricing }: PlaceHomeProps) {
   const { t, f } = copy;
-  const contact = contactOf(site, view.place);
-  const graph = placeGraph(site, view, "home", { placeName: f.place, title: t.pages.home.title(f), description: t.pages.home.description(f) }, new Date(renderedAt));
+  const now = new Date(renderedAt);
+  const nav = placeNav(view, { nav: t.nav, pages: t.footer.pages }, site.pages.home);
+  const graph = placeGraph(site, view, "home", { placeName: f.place, title: t.pages.home.title(f), description: t.pages.home.description(f) }, now);
+  const prices = jobPrices(pricing);
   return (
     <>
       <JsonLd data={graph} />
+      <JsonLd data={faqPageNode(t.faqs)} />
+      <AvailabilityBar copy={copy} />
+      <SiteHeader copy={copy} home={view.href("")} bookHref={nav.bookHref} links={nav.header} />
       <main>
-        <Section>
-          <Display>{t.hero.title(f)}</Display>
-          <p className="mt-4 text-lg text-ink-soft">{t.hero.lede}</p>
-        </Section>
-        <Section surface="card" id="quote-band">
-          <LeadCapture
-            place={view.place}
-            contact={contact}
-            locale={view.locale}
-            renderedAt={renderedAt}
-            wire={LEAD.wire}
-            needs={LEAD.subjects.map(s => ({ value: s, label: t.subjects[s] }))}
-            flows={LEAD.flows}
-            pricing={model}
-            photos={PHOTO_NEEDS}
-            text={t.leadCapture}
-            className="max-w-md"
-          />
-        </Section>
-        <Section id="areas">
-          <Coverage place={view.place} locale={view.locale} head={<Display>{t.coverageTitle}</Display>} />
-        </Section>
-        <Section>
-          <Faq items={t.faqs} />
-        </Section>
+        <Hero
+          copy={copy}
+          card={<BookingCard copy={copy} id={SECTION_IDS.book} place={view.place} contact={contactOf(site, view.place)} renderedAt={renderedAt} pricing={pricing} />}
+        />
+        <Stats copy={copy} from={lowestPrice(prices)} />
+        <PriceList copy={copy} id={SECTION_IDS.prices} prices={prices} bookHref={nav.bookHref} head />
+        <HowItWorks copy={copy} id={SECTION_IDS.steps} />
+        <Reviews copy={copy} id={SECTION_IDS.reviews} />
+        <GuaranteeBand copy={copy} bookHref={nav.bookHref} />
+        <ServiceArea copy={copy} id={SECTION_IDS.area} />
+        <FaqBand copy={copy} id={SECTION_IDS.faq} />
+        <Closing copy={copy} id={SECTION_IDS.closing} bookHref={nav.bookHref} />
       </main>
-      <CallBar
-        id="callbar"
-        label={t.contactLabel}
-        copy={copy}
-        phone={contact.phone}
-        whatsapp={contact.whatsapp}
-        quoteHref={view.href("#quote")}
-        hours={view.place.hours}
-        now={renderedAt}
-        callback={{ href: view.href("#quote-callback"), label: t.leadCapture.callback }}
-      />
+      <SiteFooter copy={copy} year={now.getFullYear()} links={nav.footer} other={nav.other} />
+      {/* Room under the footer for the sticky bar, on the footer's colour. */}
+      <div aria-hidden="true" className="dark h-[70px] bg-popover" />
+      <StickyBar copy={copy} bookHref={nav.bookHref} />
     </>
   );
 }

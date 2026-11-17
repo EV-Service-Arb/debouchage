@@ -1,11 +1,11 @@
 import { bookingRoute } from "@/shared/lib/sites-tools/next";
-import { serverEnv } from "@/shared/config/env";
+import { serverEnv, webhook } from "@/shared/config/env";
 
 /**
- * A priced lead asking for a slot: `booking.requested@1` to the panel through
- * the lead webhook's outbox. This template has no webhook, so the request is
- * answered and dropped.
+ * A priced lead's booking request (`booking.requested@1`), posted by the
+ * card when the visitor opens a booking page or sends a `manual` preference,
+ * queued on the lead webhook's outbox.
  */
 export const dynamic = "force-dynamic";
 
-export const POST = bookingRoute({ env: serverEnv });
+export const POST = bookingRoute({ env: serverEnv, webhook });

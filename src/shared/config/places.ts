@@ -2,23 +2,22 @@ import type { Place } from "@/shared/lib/sites-tools";
 import type { Locale } from "./i18n";
 
 /**
- * The baked half of every place: what the site says when the live source is
- * absent or unreachable. A service-area business has no address in its type;
- * a storefront would be `{ kind: "storefront", address, geo, … }`.
+ * The one place. A service-area business: the technician goes to the
+ * customer, so there is no address, coordinate or map. It serves
+ * Clermont-Ferrand, which its name says; the communes around it are the
+ * copy's until the owner lists them. Every `null` is a fact the owner has not
+ * given (`OWNER_TODO`): the publication gate keeps the page `noindex` until
+ * they are in.
  */
 export const PLACES: readonly Place<Locale>[] = [
   {
-    slug: "paris",
-    gbpName: "Brand — Paris",
-    name: { fr: "Paris", en: "Paris" },
+    slug: "clermont-ferrand",
+    gbpName: "Débouchage Rapide Clermont-Ferrand",
+    name: { fr: "Clermont-Ferrand", en: "Clermont-Ferrand" },
     presence: { kind: "service-area" },
-    serviceArea: [{ kind: "localities", names: ["Paris"] }],
+    serviceArea: [{ kind: "localities", names: ["Clermont-Ferrand"] }],
     channels: { phone: null, whatsapp: null },
-    hours: [{ days: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"], opens: "08:00", closes: "19:00" }],
+    hours: null,
     rating: null,
-    // How a priced lead's slot is set. Left out, the card promises a call
-    // (`manual`); the panel's place settings set it live (`PlaceLive.booking`),
-    // e.g. `{ default: "manual", providers: { google_calendar: { url: "https://calendar.app.google/…" } } }`,
-    // and the `booking_provider` experiment picks among them (`bookingOf`).
   },
 ];

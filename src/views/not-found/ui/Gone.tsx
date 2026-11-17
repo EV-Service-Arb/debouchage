@@ -4,6 +4,7 @@ import { StatusScreen } from "@/shared/lib/sites-tools/react";
 import { copyFor } from "@/entities/content";
 import type { Locale } from "@/shared/config/i18n";
 import { site } from "@/shared/config/site";
+import { Logo } from "@/shared/ui/brand/Logo";
 
 /**
  * The 404 for a dead path the proxy recognised, rendered on the server into
@@ -12,7 +13,7 @@ import { site } from "@/shared/config/site";
  */
 export function Gone({ locale, location }: { locale: Locale; location: string | null }) {
   const target = statusTarget(site, { locale, location: location ?? undefined });
-  const copy = copyFor(target.locale, { place: target.place?.name[target.locale] ?? site.brand.name, phone: target.phone });
+  const copy = copyFor(target.locale, { place: target.place?.name[target.locale] ?? site.brand.name, phone: target.phone, whatsapp: target.phone });
   return (
     <>
       <title>{`${copy.t.notFound.title} · ${site.brand.name}`}</title>
@@ -23,6 +24,8 @@ export function Gone({ locale, location }: { locale: Locale; location: string | 
         locales={site.i18n.locales}
         labels={site.i18n.labels}
         brandName={site.brand.name}
+        logo={<Logo tone="light" />}
+        buttonClassName="font-semibold"
       />
     </>
   );

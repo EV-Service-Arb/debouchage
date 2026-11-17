@@ -1,11 +1,119 @@
 @import "tailwindcss";
 @import "@evinvest/uikit/styles/tokens.css";
+/* Generated from assets/brand.toml by `npm run palette`; a test holds the
+ * committed copy to its source. */
 @import "./brand.css";
 
 /* Tailwind v4 does not scan node_modules: name the packages whose markup it
    must see. The landing contract test checks the sites-tools line. */
 @source "../node_modules/@evinvest/uikit/dist";
 @source "../node_modules/@evinvest/sites-tools/dist";
+
+/* Geometry of the Figma file 6LWuvlJoqYK4S8sdAZOIJ0: a control (field, tile)
+   is 12 px round, the large button 14; the page grid is the frame's 1136 px
+   between 152 px gutters at 1440, never less than the 16 px a phone keeps.
+   Scoped to the brand so it outranks the kit's `:where()` defaults. */
+[data-brand="debouchage"] {
+  --radius: 10px;
+  --control-radius: 12px;
+  --control-px: 28px;
+  --control-py: 16px;
+  --control-text: 16px;
+  --page-max: 71rem;
+  --page-px: max(1rem, (100% - var(--page-max)) / 2);
+  /* The faces `next/font` loaded (src/shared/ui/fonts.ts), not the family
+     names brand.toml can spell. */
+  --brand-font-sans: var(--font-instrument-sans);
+  --brand-font-serif: var(--font-bricolage);
+  /* WhatsApp's own green (Figma color/whatsapp): its brand rule, not the palette's. */
+  --whatsapp: #25d366;
+}
+
+/* The frame's icons (Figma Icons 3:3), one file each in assets/icons, painted
+   in the text colour of their use: the file masks `currentColor`. The bundler
+   fingerprints each url(). The Google G keeps its own colours. */
+.dr-icon {
+  background-color: currentColor;
+  mask: var(--dr-icon) center / 100% 100% no-repeat;
+}
+.dr-icon-google-g {
+  background: url("../assets/icons/google-g.svg") center / 100% 100% no-repeat;
+  mask: none;
+}
+.dr-icon-arrow-right {
+  --dr-icon: url("../assets/icons/arrow-right.svg");
+}
+.dr-icon-calendar {
+  --dr-icon: url("../assets/icons/calendar.svg");
+}
+.dr-icon-camera {
+  --dr-icon: url("../assets/icons/camera.svg");
+}
+.dr-icon-card {
+  --dr-icon: url("../assets/icons/card.svg");
+}
+.dr-icon-check {
+  --dr-icon: url("../assets/icons/check.svg");
+}
+.dr-icon-chevron-down {
+  --dr-icon: url("../assets/icons/chevron-down.svg");
+}
+.dr-icon-clock {
+  --dr-icon: url("../assets/icons/clock.svg");
+}
+.dr-icon-droplet {
+  --dr-icon: url("../assets/icons/droplet.svg");
+}
+.dr-icon-map-pin {
+  --dr-icon: url("../assets/icons/map-pin.svg");
+}
+.dr-icon-menu {
+  --dr-icon: url("../assets/icons/menu.svg");
+}
+.dr-icon-message {
+  --dr-icon: url("../assets/icons/message.svg");
+}
+.dr-icon-phone {
+  --dr-icon: url("../assets/icons/phone.svg");
+}
+.dr-icon-pipe {
+  --dr-icon: url("../assets/icons/pipe.svg");
+}
+.dr-icon-shield-check {
+  --dr-icon: url("../assets/icons/shield-check.svg");
+}
+.dr-icon-shower {
+  --dr-icon: url("../assets/icons/shower.svg");
+}
+.dr-icon-sink {
+  --dr-icon: url("../assets/icons/sink.svg");
+}
+.dr-icon-star {
+  --dr-icon: url("../assets/icons/star.svg");
+}
+.dr-icon-toilet {
+  --dr-icon: url("../assets/icons/toilet.svg");
+}
+.dr-icon-user-check {
+  --dr-icon: url("../assets/icons/user-check.svg");
+}
+.dr-icon-whatsapp {
+  --dr-icon: url("../assets/icons/whatsapp.svg");
+}
+.dr-icon-x {
+  --dr-icon: url("../assets/icons/x.svg");
+}
+.dr-icon-zap {
+  --dr-icon: url("../assets/icons/zap.svg");
+}
+
+/* The phone's menu is open over the page: the page behind it must not
+   scroll. Only below `lg`, where the menu shows. */
+@media not (width >= 64rem) {
+  html:has(details[data-nav-menu][open]) {
+    overflow: hidden;
+  }
+}
 
 html {
   scroll-behavior: smooth;
@@ -14,5 +122,11 @@ html {
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
+  }
+}
+
+@layer base {
+  body {
+    @apply bg-background font-sans text-ink antialiased;
   }
 }

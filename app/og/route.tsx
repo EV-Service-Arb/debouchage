@@ -12,12 +12,12 @@ const c = ogPalette();
 
 export const GET = ogRoute(site, {
   // `withLanding({ ogFiles })` traces the file into the standalone output.
-  fonts: async () => [{ name: "Inter", data: await readFile(join(process.cwd(), "assets/fonts/Inter-Regular.ttf")), weight: 400, style: "normal" }],
+  fonts: async () => [{ name: "Bricolage Grotesque", data: await readFile(join(process.cwd(), "assets/fonts/BricolageGrotesque-ExtraBold.ttf")), weight: 700, style: "normal" }],
   draw: ({ locale, place, page }) => {
     const t = TEXT[locale];
-    const f = { place: place?.name[locale] ?? site.brand.name, phone: site.brand.phone };
+    const f = { place: place?.name[locale] ?? site.brand.name, phone: site.brand.phone, whatsapp: site.brand.phone };
     return (
-      <div style={{ display: "flex", flexDirection: "column", width: "100%", height: "100%", padding: 72, background: c.background, color: c.ink, fontFamily: "Inter" }}>
+      <div style={{ display: "flex", flexDirection: "column", width: "100%", height: "100%", padding: 72, background: c.background, color: c.ink, fontFamily: "Bricolage Grotesque" }}>
         <div style={{ display: "flex", fontSize: 44, color: c.primary }}>{site.brand.name}</div>
         <div style={{ display: "flex", flex: 1, alignItems: "center", fontSize: 68 }}>{t.pages[page].title(f)}</div>
         {f.phone && <div style={{ display: "flex", fontSize: 28, color: c.inkSoft }}>{f.phone}</div>}

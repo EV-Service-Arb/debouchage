@@ -1,31 +1,17 @@
-import { faqPageNode } from "@/shared/lib/sites-tools";
-import { placeMetadata } from "@/shared/lib/sites-tools/next";
-import { Faq, JsonLd, Section } from "@/shared/lib/sites-tools/react";
 import type { Metadata } from "next";
-import { loadPlace } from "@/views/place/server";
-import { EstimateCard } from "@/views/prices";
 import { pricing } from "@/shared/config/env";
-import { site } from "@/shared/config/site";
+import { loadPlace, placePageMetadata } from "@/views/place/server";
+import { PlaceSubpage } from "@/views/subpage";
 
 type Props = { params: Promise<{ locale: string; location: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { view, copy } = await loadPlace(params);
-  const page = copy.t.pages.prices;
-  return placeMetadata(site, view, "prices", { title: page.title(copy.f), description: page.description(copy.f) });
+  return placePageMetadata(view, copy, "prices");
 }
 
 export default async function PricesPage({ params }: Props) {
+  // The price list the table starts each priced job at, live or baked: under ISR, read with the page.
   const [{ view, copy, renderedAt }, model] = await Promise.all([loadPlace(params), pricing.model()]);
-  return (
-    <main>
-      <JsonLd data={faqPageNode(copy.t.faqs)} />
-      <Section surface="card">
-        <EstimateCard view={view} copy={copy} renderedAt={renderedAt} model={model} />
-      </Section>
-      <Section>
-        <Faq items={copy.t.faqs} />
-      </Section>
-    </main>
-  );
+  return <PlaceSubpage view={view} copy={copy} page="prices" renderedAt={renderedAt} pricing={model} />;
 }
