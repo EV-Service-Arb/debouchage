@@ -122,6 +122,7 @@ export const EN = {
     placeholders: { name: "First name", phone: "Your phone", address: "Address or town" },
     priceLine: "Fixed price: {price} incl. VAT and travel",
     submitPrice: "Book · fixed price {price}",
+    answersPrice: "{price} incl. VAT",
     pricePending: "The price of the job you chose, VAT and travel included.",
     reassurance: ["No commitment", "Fixed price", "Pay afterwards"],
     trust: ["Not cleared = not charged", "Pay after the job"],

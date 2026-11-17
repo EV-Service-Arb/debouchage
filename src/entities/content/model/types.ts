@@ -127,6 +127,8 @@ export interface Text extends CoreText<PageKey, Facts> {
     priceLine: string;
     /** The submit once the job is chosen, `{price}` its price. */
     submitPrice: string;
+    /** The end of the answers' row, `{price}` the job's price. */
+    answersPrice: string;
     pricePending: string;
     reassurance: readonly string[];
     trust: readonly string[];

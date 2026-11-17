@@ -51,9 +51,9 @@ test("what and when on one screen, then who: the price on the tiles and the subm
   await expect(screen(page)).toHaveAttribute("data-lead-step", "phone");
   await expect(card(page).getByText("Où et qui prévenir ?")).toBeVisible();
   await expect(card(page).getByRole("heading", { name: "Réservez votre débouchage" })).toHaveCount(0);
-  // The first screen's answers as the recap, a tap back.
+  // The first screen's answers as the recap, a tap back, the price and « Modifier » at its end.
   await expect(card(page).locator("[data-lead-chrome] li")).toHaveCount(1);
-  await expect(card(page).locator("[data-lead-chrome] li")).toContainText("WC · Au plus vite");
+  await expect(card(page).locator("[data-lead-chrome] li")).toHaveText(/, WC · Au plus vite · 109\s€ TTCModifier$/);
   await expect(card(page).locator("[data-price-cents]")).toHaveAttribute("data-price-cents", "10900");
   await contact(page, mobile);
   await tile(page, "WhatsApp").click();
