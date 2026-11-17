@@ -126,6 +126,7 @@ export const FR = {
     placeholders: { name: "Prénom", phone: "Votre téléphone", address: "Adresse ou commune" },
     priceLine: "Prix fixe : {price} TTC, déplacement inclus",
     submitPrice: "Réserver · prix fixe {price}",
+    answersPrice: "{price} TTC",
     pricePending: "Le prix de l’intervention choisie, TTC, déplacement inclus.",
     reassurance: ["Sans engagement", "Prix fixe", "Payé après"],
     trust: ["Pas débouché = pas facturé", "Payé après l’intervention"],

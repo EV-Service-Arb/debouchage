@@ -24,6 +24,7 @@ export function leadCaptureText(t: Text, locale: Locale): LeadCaptureText {
     priceLine: c.priceLine,
     pricePending: c.pricePending,
     bookSubmitPrice: c.submitPrice,
+    answersPrice: c.answersPrice,
     preferDay: c.slotDay,
     preferPart: c.slotPart,
     slotToday: c.slotToday,

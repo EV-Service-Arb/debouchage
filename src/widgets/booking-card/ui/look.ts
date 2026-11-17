@@ -27,7 +27,8 @@ export const SUBMIT = "h-14 w-full rounded-[14px] px-7 text-base leading-[1.25] 
  * `contents`, so the card's own rows — head, answers, screens — are one
  * column with one gap; the kit's bar and « Retour » are not drawn (the bar's
  * words stay for assistive technology), the answers are the frame's recap
- * row, one « Modifier » at its end.
+ * row, the price and « Modifier » at its end; the price line is for
+ * assistive technology only.
  */
 export const LOOK: Look = {
   root: "gap-5",
@@ -37,9 +38,10 @@ export const LOOK: Look = {
   progress: "sr-only",
   stepBack: "hidden",
   answers:
-    "flex-nowrap items-center gap-0 rounded-xl bg-card px-3.5 py-2.5 [&>li]:min-w-0 [&>li:not(:last-child)]:after:px-1 [&>li:not(:last-child)]:after:text-sm [&>li:not(:last-child)]:after:font-semibold [&>li:not(:last-child)]:after:text-ink [&>li:not(:last-child)]:after:content-['·'] [&>li]:flex [&>li]:items-center [&>li:last-child]:flex-1 [&>li:not(:last-child)_button>span:last-child]:hidden",
-  answer:
-    "min-h-0 w-full justify-between gap-2.5 border-0 bg-transparent p-0 text-sm leading-[1.25] font-semibold whitespace-nowrap shadow-none hover:bg-transparent [&>span:last-child]:font-medium [&>span:last-child]:text-primary-ink [&>span:nth-child(2)]:truncate [&>span:nth-child(2)]:font-semibold",
+    "flex-nowrap items-center gap-0 rounded-xl bg-card px-3.5 py-2.5 [&>li]:min-w-0 [&>li:not(:last-child)]:after:px-1 [&>li:not(:last-child)]:after:text-sm [&>li:not(:last-child)]:after:font-semibold [&>li:not(:last-child)]:after:text-ink [&>li:not(:last-child)]:after:content-['·'] [&>li]:flex [&>li]:items-center [&>li:last-child]:flex-1",
+  answer: "min-h-0 min-w-0 shrink grow justify-between gap-2.5 border-0 bg-transparent p-0 text-sm leading-[1.25] font-semibold whitespace-nowrap shadow-none hover:bg-transparent",
+  answerValue: "truncate font-semibold",
+  answerChange: "shrink-0 font-medium text-primary-ink",
   step: "gap-2.5",
   intro: "gap-0",
   introOptions: "grid-cols-3 gap-2",
@@ -52,9 +54,7 @@ export const LOOK: Look = {
   control: FIELD,
   field: "gap-0",
   error: "order-6",
-  price: "order-5 py-1",
-  priceLine: "text-sm leading-[1.45] text-ink-mid",
-  priceTotal: "font-semibold text-ink",
+  price: "sr-only",
   trust: "order-7 gap-3",
   submit: SUBMIT,
   stepNext: SUBMIT,
