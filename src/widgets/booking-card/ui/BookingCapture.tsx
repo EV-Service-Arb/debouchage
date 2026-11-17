@@ -19,7 +19,8 @@ const isWhen = (value: unknown): value is When => (WHEN as readonly unknown[]).i
 export function BookingCapture({ doneText, ...props }: Omit<LeadCaptureProps, "done" | "booking"> & { doneText: DoneText }) {
   const [posted, setPosted] = useState<{ subject: Subject | null; when: When | null }>({ subject: null, when: null });
   const read = (event: FormEvent<HTMLDivElement>) => {
-    if (!(event.target instanceof HTMLFormElement)) return;
+    // The lead's form only: the slot preference is a form of its own, inside the card too.
+    if (!(event.target instanceof HTMLFormElement) || event.target.id !== `${props.id}-form`) return;
     const data = new FormData(event.target);
     const subject = data.get(props.wire.subject);
     const when = data.get(EXTRAS.when.name);

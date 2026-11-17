@@ -65,11 +65,12 @@ export function BookingCard({ copy, id, place, contact, renderedAt, pricing }: B
     callbackBody: c.done.callbackBody,
   };
   // Shown on the first two screens only, the contact's on the last: whole class names, for Tailwind to see.
-  const onContact = "group-has-[[data-lead-step=phone]:not([data-lead-off])]/card";
+  const offContact = "group-has-[[data-lead-step=phone]:not([data-lead-off])]/card:hidden";
+  const onContact = "hidden group-has-[[data-lead-step=phone]:not([data-lead-off])]/card:flex";
   return (
     <BookingCapture
       id={id}
-      className="light group/card relative rounded-3xl bg-background p-5 text-ink shadow-[0_24px_30px_rgba(0,0,0,0.28)] lg:p-7"
+      className="light group/card relative rounded-3xl bg-background text-ink shadow-[0_24px_30px_rgba(0,0,0,0.28)] p-4 sm:p-5 lg:p-7"
       place={place}
       contact={contact}
       locale={locale}
@@ -93,15 +94,15 @@ export function BookingCard({ copy, id, place, contact, renderedAt, pricing }: B
       text={leadCaptureText(t, locale)}
       head={
         <>
-          <div className={`flex flex-col gap-1 ${onContact}:hidden`}>
+          <div className={`flex flex-col gap-1 ${offContact}`}>
             <h2 className="font-serif text-[26px] leading-[1.15] font-bold tracking-[-0.005em] text-ink">{c.title}</h2>
             <p className="text-sm leading-[1.45] text-ink-mid">{c.lede}</p>
           </div>
-          <div className={`hidden flex-col gap-1 ${onContact}:flex`}>
+          <div className={`flex-col gap-1 ${onContact}`}>
             <p className="font-serif text-[26px] leading-[1.15] font-bold tracking-[-0.005em] text-ink">{c.contactTitle}</p>
             <p className="text-sm leading-[1.45] text-ink-mid">{c.contactLede}</p>
           </div>
-          <ul className={`order-last flex flex-wrap justify-center gap-x-3.5 gap-y-1 ${onContact}:hidden`}>
+          <ul className={`order-last flex flex-wrap justify-center gap-x-3.5 gap-y-1 ${offContact}`}>
             {c.reassurance.map(line => (
               <Check key={line}>{line}</Check>
             ))}

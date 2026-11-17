@@ -107,7 +107,8 @@ test("« autre jour » books, then offers the kit's slot preference, sent as boo
   await expect(done).toContainText("Préférence notée");
 });
 
-test("a price row's « Réserver » names its job: the card does not ask it again", async ({ page }) => {
+test("a price row's « Réserver » names its job: the card does not ask it again", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name === "mobile", "on a phone the rows drop their button for one under the table");
   await open(page, "/fr#tarifs");
   await page.locator("#tarifs a[data-need=jetting]").click();
   await tile(page, "Aujourd’hui").click();
@@ -121,7 +122,7 @@ test("a number the form cannot call is blocked before it is sent, in the page's 
   await tile(page, "Au plus vite").click();
   await tile(page, "Évier, lavabo").click();
   let sent = 0;
-  page.on("request", r => void (r.method() === "POST" && sent++));
+  page.on("request", r => void (r.method() === "POST" && new URL(r.url()).pathname === "/quote" && sent++));
   const phone = screen(page).getByRole("textbox", { name: "Téléphone" });
   await phone.fill("+3361234567");
   await card(page).getByRole("button", { name: "Réserver" }).click();

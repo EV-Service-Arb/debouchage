@@ -53,6 +53,7 @@
             "assets/card.toml"
             "assets/mark.svg"
             "assets/fonts"
+            "assets/icons"
             "next.config.ts"
             "tsconfig.json"
             "postcss.config.mjs"

@@ -11,7 +11,7 @@ export type Look = Readonly<Partial<Record<LeadCapturePart, string>>>;
  * first, the price or the hint at 12 ink-mid under it.
  */
 export const TILE =
-  "h-full flex-col items-start justify-start gap-1.5 rounded-xl border-[1.5px] border-input bg-background p-3 text-left text-xs leading-[1.4] whitespace-pre-line text-ink-mid peer-checked:border-ink peer-checked:bg-primary/20 peer-checked:shadow-[inset_0_0_0_0.5px_var(--ink)] [&>span:last-child]:first-line:text-sm [&>span:last-child]:first-line:leading-[1.7] [&>span:last-child]:first-line:font-semibold [&>span:last-child]:first-line:text-ink [&_.dr-icon]:size-[22px] [&_.dr-icon]:text-ink";
+  "h-full flex-col items-start justify-start gap-1.5 rounded-xl border-[1.5px] border-input bg-background p-2.5 text-left sm:p-3 text-xs leading-[1.4] whitespace-pre-line text-ink-mid peer-checked:border-ink peer-checked:bg-primary/20 peer-checked:shadow-[inset_0_0_0_0.5px_var(--ink)] [&>span:last-child]:first-line:text-sm [&>span:last-child]:first-line:leading-[1.7] [&>span:last-child]:first-line:font-semibold [&>span:last-child]:first-line:text-ink [&_.dr-icon]:size-[22px] [&_.dr-icon]:text-ink";
 
 /** The frame's Field (4:109 – 4:115): 52 px, a 1.5 px `input` edge, 12 round, 16 px text; a 2 px ring on focus. */
 export const FIELD =
@@ -40,7 +40,7 @@ export const LOOK: Look = {
   form: "contents",
   // The questions' legends: the fields' labels are for assistive technology only (`labels="hidden"`).
   label: "mb-2.5 text-sm leading-[1.25] font-semibold text-ink",
-  progress: "[&>[data-slot=progress]]:hidden",
+  progress: "sr-only",
   stepBack: "hidden",
   answers:
     "flex-nowrap items-center gap-0 rounded-xl bg-card px-3.5 py-2.5 [&>li]:min-w-0 [&>li:not(:last-child)]:after:px-1 [&>li:not(:last-child)]:after:text-sm [&>li:not(:last-child)]:after:font-semibold [&>li:not(:last-child)]:after:text-ink [&>li:not(:last-child)]:after:content-['·'] [&>li]:flex [&>li]:items-center [&>li:last-child]:flex-1 [&>li:not(:last-child)_button>span:last-child]:hidden",

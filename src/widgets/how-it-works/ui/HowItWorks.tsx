@@ -21,7 +21,7 @@ export function HowItWorks({ copy, id }: { copy: Copy; id: string }) {
           ] as const
         ).map(([icon, step], i) => (
           <li key={step.title} className="flex gap-3.5 rounded-[20px] border border-border bg-background p-[19px] md:flex-col md:gap-4 md:p-7">
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between self-start md:self-auto">
               <span className="flex size-9 items-center justify-center rounded-full bg-primary text-base leading-[1.25] font-bold text-on-primary md:size-10 md:text-lg">{i + 1}</span>
               <Icon name={icon} className="hidden size-6 text-ink md:block" />
             </div>
