@@ -1,7 +1,7 @@
 import type { Copy } from "@/entities/content";
 import type { NavLink } from "@/shared/config/nav";
 import { phoneLink, whatsappLink } from "@/shared/lib/phone";
-import { button, Icon, Logo } from "@/shared/ui";
+import { button, Icon, Logo, Stars } from "@/shared/ui";
 import { MobileMenu } from "./MobileMenu";
 
 export interface SiteHeaderProps {
@@ -15,10 +15,10 @@ export interface SiteHeaderProps {
 const FOCUS = "focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring";
 
 /**
- * The frame's NavBar (7:180) on the dark background: the logo, the home
- * page's bands from `lg`, then WhatsApp, the number and « Réserver » — the
- * two contacts only when the place has a number, WhatsApp first. Below `lg`
- * the logo and the burger, whose menu carries the same.
+ * The nav bar on the dark background: the logo, the home page's bands from
+ * `lg`, then the rating, the number and « Réserver » — the number only when
+ * the place has one. Below `lg` the logo and the burger, whose menu carries
+ * the same and WhatsApp.
  */
 export function SiteHeader({ copy, home, bookHref, links }: SiteHeaderProps) {
   const { t } = copy;
@@ -26,7 +26,7 @@ export function SiteHeader({ copy, home, bookHref, links }: SiteHeaderProps) {
   const whatsapp = whatsappLink(copy.f.whatsapp, t.whatsappMessage(copy.f));
   return (
     <header className="dark relative z-40 bg-background text-ink">
-      <div className="flex h-[72px] items-center justify-between gap-6 px-[var(--page-px)] lg:h-20">
+      <div className="flex h-16 items-center justify-between gap-6 px-[var(--page-px)]">
         <a href={home} aria-label={t.nav.home} className={`relative z-10 rounded-lg ${FOCUS}`}>
           <Logo tone="dark" />
         </a>
@@ -39,11 +39,14 @@ export function SiteHeader({ copy, home, bookHref, links }: SiteHeaderProps) {
         </nav>
         <div className="hidden items-center gap-4 lg:flex">
           {whatsapp && (
-            <a href={whatsapp} className={`${button("whatsapp")} inline-flex items-center ${FOCUS}`}>
-              <Icon name="whatsapp" className="size-[18px]" />
-              {t.whatsappLabel}
+            <a href={whatsapp} aria-label={t.whatsappLabel} className={`flex size-11 items-center justify-center rounded-[10px] border-[1.5px] border-input text-ink hover:bg-hover ${FOCUS}`}>
+              <Icon name="whatsapp" className="size-5" />
             </a>
           )}
+          <p className="hidden items-center gap-2 xl:flex">
+            <Stars />
+            <span className="text-sm leading-[1.25] font-bold text-ink">{t.hero.rating.value}</span>
+          </p>
           {phone && (
             <a href={phone.href} aria-label={t.callLabel(copy.f)} className={`flex items-center gap-2 text-base leading-[1.25] font-bold whitespace-nowrap text-ink ${FOCUS}`}>
               <Icon name="phone" className="size-4" />

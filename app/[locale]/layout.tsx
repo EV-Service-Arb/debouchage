@@ -16,12 +16,18 @@ export const metadata: Metadata = {
   formatDetection: { telephone: false },
 };
 
-export const viewport: Viewport = { width: "device-width", initialScale: 1 };
+export const viewport: Viewport = { width: "device-width", initialScale: 1, colorScheme: "light dark" };
+
+/** Blocking, so the first paint is already the visitor's scheme; without JavaScript the page stays light. */
+const SCHEME = `document.documentElement.className=document.documentElement.className.replace("light",matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")`;
 
 export default async function RootLayout({ children, params }: { children: ReactNode; params: Promise<{ locale: string }> }) {
   const locale = await loadLocale(site, params);
   return (
-    <html lang={locale} data-brand={site.brand.id} className={`light ${text.variable} ${display.variable}`}>
+    <html lang={locale} data-brand={site.brand.id} suppressHydrationWarning className={`light ${text.variable} ${display.variable}`}>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: SCHEME }} />
+      </head>
       <body>{children}</body>
     </html>
   );

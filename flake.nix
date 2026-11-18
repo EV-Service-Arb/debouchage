@@ -39,6 +39,8 @@
           root = ./.;
           # the e2e build under test, so a `nix run .#dev` is never mistaken for it
           e2ePort = toString (SA_PORT + 5);
+          # the brand's design file: a render lands on a new page of it
+          figmaFile = "6LWuvlJoqYK4S8sdAZOIJ0";
           # reads sites_panel and posts leads to the conductor; devops wires both addresses
           connected = true;
           buildFiles = [
@@ -51,6 +53,7 @@
             "assets/mark.svg"
             "assets/fonts"
             "assets/icons"
+            "assets/photos"
             "next.config.ts"
             "tsconfig.json"
             "postcss.config.mjs"

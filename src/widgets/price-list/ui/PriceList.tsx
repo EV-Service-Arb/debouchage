@@ -3,7 +3,7 @@ import { Section } from "@/shared/lib/sites-tools/react";
 import type { Copy } from "@/entities/content";
 import { SUBJECTS } from "@/shared/config/lead";
 import type { JobPrices } from "@/shared/lib/job-prices";
-import { BandHead, button, Icon, JOB_ICON } from "@/shared/ui";
+import { BandHead, button, Icon, JOB_PHOTO, Photo } from "@/shared/ui";
 
 export interface PriceListProps {
   copy: Copy;
@@ -16,57 +16,43 @@ export interface PriceListProps {
 }
 
 /**
- * The frame's Prices band (8:318 / Mobile 11:700): the whole list as a
- * table, one row a job — its icon, name and what is done, the price with
- * what it includes, « Réserver » naming the job for the card (`data-need`) —
- * then the three terms. On a phone the rows drop their button and the
- * included line, said once under the table, and one button follows the terms.
+ * The whole list, one card a job: the photograph of the job, its name and what
+ * is done, the price, « Réserver » naming the job for the card (`data-need`).
+ * The three terms follow as plain lines. On a phone the card is a row, the
+ * photograph a thumbnail.
  */
 export function PriceList({ copy, id, prices, bookHref, head }: PriceListProps) {
   const { t, locale } = copy;
   const p = t.prices;
   return (
-    <Section surface="background" id={id} data-band="price-list" className="py-14 md:py-24">
+    <Section surface="background" id={id} data-band="price-list" className="py-14 md:py-20">
       {head && <BandHead eyebrow={p.eyebrow} title={p.title} lede={p.lede} />}
-      <table className={`w-full border-separate border-spacing-0 overflow-hidden rounded-[20px] border border-border ${head ? "mt-6 md:mt-10" : ""}`}>
-        <caption className="sr-only">{p.caption}</caption>
-        <tbody>
-          {SUBJECTS.map(s => {
-            const cents = prices[s];
-            return (
-              <tr key={s} className="even:bg-card">
-                <td className="w-14 py-3.5 pl-3.5 align-middle md:w-[88px] md:py-5 md:pl-6">
-                  <span className="flex size-10 items-center justify-center rounded-xl bg-primary/20 md:size-11">
-                    <Icon name={JOB_ICON[s]} className="size-5 md:size-[22px]" />
-                  </span>
-                </td>
-                <th scope="row" className="py-3.5 pl-3 text-left align-middle font-normal md:py-5 md:pl-5">
-                  <span className="block text-base leading-[1.25] font-bold text-ink md:text-lg">{t.jobs[s].name}</span>
-                  <span className="mt-0.5 block text-xs leading-[1.4] text-ink-mid md:text-sm md:leading-[1.45]">
-                    <span className="hidden md:inline">{t.jobs[s].detail}</span>
-                    <span className="md:hidden">{t.jobs[s].detailShort}</span>
-                  </span>
-                </th>
-                <td className="py-3.5 pr-3.5 pl-3 text-right align-middle whitespace-nowrap md:py-5 md:pr-0 md:pl-5">
-                  {cents !== null && (
-                    <>
-                      <span className="block font-serif text-[26px] leading-none font-extrabold tracking-[-0.01em] text-ink md:text-3xl">{formatCents(cents, locale)}</span>
-                      <span className="hidden text-xs leading-[1.4] text-ink-soft md:block">{p.included}</span>
-                    </>
-                  )}
-                </td>
-                <td className="hidden w-[122px] py-5 pr-6 pl-5 text-right align-middle md:table-cell">
-                  <a href={bookHref} data-need={s} data-intent="form_open" className={`${button("outline")} inline-flex items-center`}>
-                    {p.book}
-                  </a>
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
-      <p className="mt-6 text-center text-xs leading-[1.4] text-ink-soft md:hidden">{p.note}</p>
-      <ul className="mt-6 grid gap-6 md:mt-10 md:grid-cols-3 md:gap-5">
+      {!head && <h2 className="sr-only">{p.caption}</h2>}
+      <ul className={`grid gap-3 sm:grid-cols-2 md:gap-5 lg:grid-cols-3 ${head ? "mt-8 md:mt-10" : ""}`}>
+        {SUBJECTS.map(s => {
+          const cents = prices[s];
+          return (
+            <li key={s} className="flex overflow-hidden rounded-2xl border border-border bg-card sm:flex-col">
+              <Photo src={JOB_PHOTO[s]} alt={t.media.jobs[s]} className="w-28 shrink-0 object-cover sm:aspect-[3/2] sm:w-full" />
+              <div className="flex min-w-0 flex-1 flex-col gap-2 p-4 md:gap-3 md:p-5">
+                <div className="flex items-start justify-between gap-3">
+                  <h3 className="font-serif text-base leading-[1.2] font-bold text-ink md:text-lg">{t.jobs[s].name}</h3>
+                  {cents !== null && <p className="font-serif text-2xl leading-none font-extrabold tracking-[-0.01em] whitespace-nowrap text-ink md:text-3xl">{formatCents(cents, locale)}</p>}
+                </div>
+                <p className="text-xs leading-[1.4] text-ink-mid md:text-sm md:leading-[1.45]">
+                  <span className="hidden md:inline">{t.jobs[s].detail}</span>
+                  <span className="md:hidden">{t.jobs[s].detailShort}</span>
+                </p>
+                <a href={bookHref} data-need={s} data-intent="form_open" className={`${button("outline")} mt-auto inline-flex items-center justify-center self-start`}>
+                  {p.book}
+                </a>
+              </div>
+            </li>
+          );
+        })}
+      </ul>
+      <p className="mt-5 text-xs leading-[1.4] text-ink-soft md:hidden">{p.note}</p>
+      <ul className="mt-8 grid gap-4 md:mt-10 md:grid-cols-3 md:gap-8">
         {(
           [
             ["clock", p.terms[0]],
@@ -74,19 +60,14 @@ export function PriceList({ copy, id, prices, bookHref, head }: PriceListProps) 
             ["user-check", p.terms[2]],
           ] as const
         ).map(([icon, term]) => (
-          <li key={term.title} className="flex gap-3 rounded-2xl bg-card p-4 md:gap-3.5 md:p-5 md:pb-10">
-            <Icon name={icon} className="size-5 text-primary-ink md:size-[22px]" />
-            <div className="flex flex-col gap-1">
-              <p className="text-sm leading-[1.25] font-bold text-ink md:text-base">{term.title}</p>
-              <p className="text-sm leading-[1.45] text-ink-mid">{term.body}</p>
-            </div>
+          <li key={term.title} className="flex gap-3">
+            <Icon name={icon} className="mt-0.5 size-5 shrink-0 text-primary-ink" />
+            <p className="text-sm leading-[1.45] text-ink-mid">
+              <span className="font-bold text-ink">{term.title}</span> {term.body}
+            </p>
           </li>
         ))}
       </ul>
-      <a href={bookHref} data-intent="form_open" className={`${button("primary", "lg")} mt-6 flex items-center justify-center md:hidden`}>
-        {p.cta}
-        <Icon name="arrow-right" className="size-5" />
-      </a>
     </Section>
   );
 }

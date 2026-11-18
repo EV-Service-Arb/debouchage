@@ -87,11 +87,9 @@ export interface Term {
  */
 export interface Text extends CoreText<PageKey, Facts> {
   nav: Record<NavId, string> & { menu: string; home: string; book: string };
-  /** The strip over the header: the availability and the hours. */
-  availability: { now: string; nowShort: string; hours: string };
+  /** The hero's pill: who is free now. */
+  availability: string;
   hero: {
-    eyebrow: string;
-    eyebrowShort: string;
     /** Two lines in white, the accent line in yellow. */
     title: readonly [string, string];
     accent: string;
@@ -99,7 +97,6 @@ export interface Text extends CoreText<PageKey, Facts> {
     ledeShort: string;
     rating: { value: string; count: string };
     chips: readonly string[];
-    who: { initials: readonly string[]; title: string; titleShort: string; lede: string; ledeShort: string };
     orNow: string;
   };
   /** The booking card (Figma BookingCard 5:282): the brand's words over the kit's `LeadCapture`. */
@@ -154,6 +151,8 @@ export interface Text extends CoreText<PageKey, Facts> {
       callbackBody: string;
     };
   };
+  /** The photographs' `alt`: what each shows, once. */
+  media: { hero: string; crew: string; zone: string; jobs: Record<Subject, string>; reviews: Record<ReviewKey, string> };
   stats: readonly { value: string; label: string; labelShort: string }[];
   jobs: Record<Subject, Job>;
   prices: BandHeadCopy & {
@@ -168,7 +167,6 @@ export interface Text extends CoreText<PageKey, Facts> {
   };
   steps: BandHeadCopy & { items: readonly [Step, Step, Step] };
   reviews: BandHeadCopy & { average: string; total: string; note: string; items: Record<ReviewKey, Review> };
-  guarantee: { title: string; body: string; cta: string };
   area: BandHeadCopy & { towns: readonly string[]; more: string };
   faqEyebrow: string;
   faqTitle: string;

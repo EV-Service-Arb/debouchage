@@ -6,3 +6,5 @@ export { Stars } from "./Stars";
 export { TYPE } from "./type";
 export { button, type ButtonStyle } from "./buttons";
 export { JOB_ICON } from "./job-icons";
+export { Photo } from "./Photo";
+export { JOB_PHOTO, PHOTO } from "./photos";

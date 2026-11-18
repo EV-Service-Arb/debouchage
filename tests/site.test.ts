@@ -48,11 +48,10 @@ describe("Débouchage Rapide before launch", () => {
 describe("the home page", () => {
   it.each(["fr", "en"] as const)("renders the frame's bands, in its order (%s)", locale => {
     const html = home(locale);
-    const bands = ["availability", "hero", "stats", "price-list", "how-it-works", "reviews", "guarantee", "service-area", "faq", "cta", "sticky"];
+    const bands = ["hero", "stats", "price-list", "how-it-works", "reviews", "service-area", "faq", "cta", "sticky"];
     const at = bands.map(b => html.indexOf(`data-band="${b}"`));
     expect(at.every(i => i >= 0), JSON.stringify(Object.fromEntries(bands.map((b, i) => [b, at[i]])))).toBe(true);
     expect(at).toEqual([...at].sort((a, b) => a - b));
-    expect(html.indexOf("<header")).toBeGreaterThan(html.indexOf('data-band="availability"'));
     expect(html.indexOf("<header")).toBeLessThan(html.indexOf('data-band="hero"'));
   });
 

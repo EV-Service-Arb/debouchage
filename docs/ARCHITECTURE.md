@@ -22,6 +22,14 @@ POST /quote ── prices the posted job with priceOf ── store ──▶ lea
         └ the slot asked on the card ──▶ booking.requested ──▶ panel
 ```
 
+## Design
+
+Figma file [`6LWuvlJoqYK4S8sdAZOIJ0`](https://www.figma.com/design/6LWuvlJoqYK4S8sdAZOIJ0): its `Color` variables (Light, Dark) are `assets/brand.toml`'s roles; `nix run .#figma` adds the rendered pages (`figmaFile` in the flake).
+
+- **Colour:** one hue family (petrol) carries every surface in both polarities, as steps of one ladder; a band differs from the page by a step, not a colour. Amber is the action colour only: buttons, stars, the closing band. Text/surface pairs are ≥ 4.5:1.
+- **Photographs:** real-looking, never stock; jobs, reviews, crew, city, hero. Generated stand-ins in `assets/photos` (OWNER_TODO « photographs »), replaced under the same names.
+- **Hero video:** `HeroMedia`, experiment `hero_media`: cookie `ab_hero_media=video` plays the clip, otherwise the still. The panel must define the experiment.
+
 ## Invariants
 
 **The visitor is in an emergency.** Every trade-off resolves for the person on
@@ -47,7 +55,7 @@ owner has not given. The place names Clermont-Ferrand only, which its name
 says.
 
 **Sample content never reaches `site`.** The Figma frame's prices, rating,
-stats, reviews, technicians, identifiers, night rate and guarantees are on the
+stats, reviews, photographs, technicians, identifiers, night rate and guarantees are on the
 page as the frame has them — in the copy and `pricing.ts` — and each is a
 launch-blocking `OWNER_TODO`. The frame's sample phone is never rendered.
 Nothing of it reaches `site`, `card.toml`, JSON-LD, the OG card or a

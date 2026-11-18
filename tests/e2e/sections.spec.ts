@@ -7,14 +7,12 @@ import { defineSectionSuite } from "../../src/shared/lib/sites-tools/testing-e2e
 // element. The sticky bar rides the viewport: hidden in every crop
 // (screenshot-section.css) rather than shot.
 defineSectionSuite({ test, expect }, [
-  { name: "availability", url: "/fr", selector: "[data-band=availability]" },
   { name: "header", url: "/fr", selector: "header >> nth=0" },
   { name: "hero", url: "/fr", selector: "[data-band=hero]" },
   { name: "stats", url: "/fr", selector: "[data-band=stats]" },
   { name: "prices", url: "/fr#tarifs", selector: "#tarifs" },
   { name: "steps", url: "/fr#etapes", selector: "#etapes" },
   { name: "reviews", url: "/fr#avis", selector: "#avis" },
-  { name: "guarantee", url: "/fr#zone", selector: "[data-band=guarantee]" },
   { name: "area", url: "/fr#zone", selector: "#zone" },
   { name: "faq", url: "/fr#faq", selector: "#faq" },
   { name: "closing", url: "/fr#demande", selector: "#demande" },

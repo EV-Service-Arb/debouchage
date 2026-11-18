@@ -6,7 +6,6 @@ import type { Locale } from "@/shared/config/i18n";
 import { placeNav } from "@/shared/config/nav";
 import { site, type Subpage } from "@/shared/config/site";
 import { jobPrices } from "@/shared/lib/job-prices";
-import { AvailabilityBar } from "@/widgets/availability-bar";
 import { Closing } from "@/widgets/closing";
 import { CompanyFacts } from "@/widgets/company-facts";
 import { Crew } from "@/widgets/crew";
@@ -86,7 +85,6 @@ export function PlaceSubpage({ view, copy, page, renderedAt, pricing = null }: P
   return (
     <>
       <JsonLd data={graph} />
-      <AvailabilityBar copy={copy} />
       <SiteHeader copy={copy} home={view.href("")} bookHref={nav.bookHref} links={nav.header} />
       <main>
         <PageHead head={t.heads[page]} aside={<ProofAside copy={copy} bookHref={nav.bookHref} />} />

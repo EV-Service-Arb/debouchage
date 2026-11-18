@@ -6,9 +6,9 @@ import { button, Icon, TYPE } from "@/shared/ui";
 const OUTLINE = "border-[1.5px] border-on-primary bg-transparent text-on-primary hover:bg-on-primary/5";
 
 /**
- * The frame's Closing CTA (10:579 / Mobile 13:863) on yellow: the headline,
- * the lede, the dark button back to the card, and from `md` WhatsApp and the
- * number as outline buttons — WhatsApp first, each only when the place has one.
+ * The last call to act, on the one band of the page in the action colour: the
+ * headline, the lede, the dark button back to the card, and from `md` WhatsApp and
+ * the number as outline buttons, each only when the place has one.
  */
 export function Closing({ copy, id, bookHref }: { copy: Copy; id: string; bookHref: string }) {
   const { t, f } = copy;

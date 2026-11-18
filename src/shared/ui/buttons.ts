@@ -11,8 +11,8 @@ const STYLE = {
   primary: "bg-primary text-on-primary hover:bg-primary/85",
   dark: "bg-brand text-white hover:bg-brand/85",
   outline: "border-[1.5px] border-input bg-transparent text-ink shadow-none hover:bg-hover",
-  whatsapp: "bg-[var(--whatsapp)] text-on-primary hover:brightness-95",
-  ghost: "border border-white/25 bg-white/10 text-white hover:bg-white/20",
+  whatsapp: "border-[1.5px] border-input bg-transparent text-ink shadow-none hover:bg-hover",
+  ghost: "border border-white/25 bg-black/25 text-white backdrop-blur-sm hover:bg-black/40",
 } as const;
 
 export type ButtonStyle = keyof typeof STYLE;

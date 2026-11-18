@@ -5,11 +5,9 @@ import type { Locale } from "@/shared/config/i18n";
 import { ANCHORS, placeNav } from "@/shared/config/nav";
 import { site } from "@/shared/config/site";
 import { jobPrices, lowestPrice } from "@/shared/lib/job-prices";
-import { AvailabilityBar } from "@/widgets/availability-bar";
 import { BookingCard } from "@/widgets/booking-card";
 import { Closing } from "@/widgets/closing";
 import { FaqBand } from "@/widgets/faq";
-import { GuaranteeBand } from "@/widgets/guarantee-band";
 import { Hero } from "@/widgets/hero";
 import { HowItWorks } from "@/widgets/how-it-works";
 import { PriceList } from "@/widgets/price-list";
@@ -46,7 +44,6 @@ export function PlaceHome({ view, copy, renderedAt, pricing }: PlaceHomeProps) {
     <>
       <JsonLd data={graph} />
       <JsonLd data={faqPageNode(t.faqs)} />
-      <AvailabilityBar copy={copy} />
       <SiteHeader copy={copy} home={view.href("")} bookHref={nav.bookHref} links={nav.header} />
       <main>
         <Hero
@@ -57,14 +54,13 @@ export function PlaceHome({ view, copy, renderedAt, pricing }: PlaceHomeProps) {
         <PriceList copy={copy} id={SECTION_IDS.prices} prices={prices} bookHref={nav.bookHref} head />
         <HowItWorks copy={copy} id={SECTION_IDS.steps} />
         <Reviews copy={copy} id={SECTION_IDS.reviews} />
-        <GuaranteeBand copy={copy} bookHref={nav.bookHref} />
         <ServiceArea copy={copy} id={SECTION_IDS.area} />
         <FaqBand copy={copy} id={SECTION_IDS.faq} />
         <Closing copy={copy} id={SECTION_IDS.closing} bookHref={nav.bookHref} />
       </main>
       <SiteFooter copy={copy} year={now.getFullYear()} links={nav.footer} other={nav.other} />
       {/* Room under the footer for the sticky bar, on the footer's colour. */}
-      <div aria-hidden="true" className="dark h-[70px] bg-popover" />
+      <div aria-hidden="true" className="dark h-[70px] bg-popover md:hidden" />
       <StickyBar copy={copy} bookHref={nav.bookHref} />
     </>
   );

@@ -25,8 +25,6 @@
      names brand.toml can spell. */
   --brand-font-sans: var(--font-instrument-sans);
   --brand-font-serif: var(--font-bricolage);
-  /* WhatsApp's own green (Figma color/whatsapp): its brand rule, not the palette's. */
-  --whatsapp: #25d366;
 }
 
 /* The frame's icons (Figma Icons 3:3), one file each in assets/icons, painted
